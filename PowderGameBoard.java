@@ -1,18 +1,20 @@
 import java.util.ArrayList;
 
+/*
+ * TODO: Add an update method to update every cell according to Particle and checkedList
+ */
+
 public class PowderGameBoard {
-    private ArrayList<Material> materialBoard;
-    private boolean[] checkedList;
+    private ArrayList<Particle> board;
     private int width;
     private int height;
 
     public PowderGameBoard(int width, int height) {
         this.width = width;
         this.height = height;
-        this.checkedList = new boolean[(width-1)*(height-1)];
-        this.materialBoard = new ArrayList<Material>();
+        this.board = new ArrayList<Particle>();
         for (int i = 0; i < width*height; i++) {
-            this.materialBoard.add(Material.EMPTY);
+            this.board.add(new Empty(i));
         }
         this.createBarrier();
     }
@@ -21,8 +23,8 @@ public class PowderGameBoard {
         this(10, 10);
     }
 
-    public ArrayList<Material> getMaterialBoard() {
-        return materialBoard;
+    public ArrayList<Particle> getboard() {
+        return board;
     }
 
     public int getSize() {
@@ -37,7 +39,6 @@ public class PowderGameBoard {
         this.changeBoardWidth(width);
         this.width = width;
         this.createBarrier();
-        this.checkedList = new boolean[(this.width-1)*(this.height-1)];
     }
 
     public int getHeight() {
@@ -48,18 +49,17 @@ public class PowderGameBoard {
         this.changeBoardHeight(height);
         this.height = height;
         this.createBarrier();
-        this.checkedList = new boolean[(this.width-1)*(this.height-1)];
     }
 
     public void createBarrier() {
-        this.materialBoard.replaceAll(element -> (element == Material.BARRIER) ? Material.EMPTY : element); // clear BARRIERs from board
+        this.board.replaceAll(element -> (element.equals(Material.BARRIER)) ? new Empty(element.getIndex()) : element); // clear BARRIERs from board
         for (int i = 0; i < this.width; i++) { // Floor and ceiling
-            this.materialBoard.set(i, Material.BARRIER);
-            this.materialBoard.set((this.height - 1) * this.width + i, Material.BARRIER);
+            this.board.set(i, new Barrier(i));
+            this.board.set((this.height - 1) * this.width + i, new Barrier((this.height - 1) * this.width + i));
         }
         for (int j = 1; j < this.height - 1; j++) { // Sides
-            this.materialBoard.set(this.width * j, Material.BARRIER);
-            this.materialBoard.set(this.width * j + this.width - 1, Material.BARRIER);
+            this.board.set(this.width * j, new Barrier(this.width * j));
+            this.board.set(this.width * j + this.width - 1, new Barrier(this.width * j + this.width - 1));
         }
     }
 
@@ -69,13 +69,13 @@ public class PowderGameBoard {
         if (difference > 0) { // if widening the board
             for (int i = 0; i < this.height; i++) {
                 for (int j = 0; j < difference; j++) {
-                    this.materialBoard.add(i * this.width + this.width + i * difference + j, Material.EMPTY);
+                    this.board.add(i * this.width + this.width + i * difference + j, new Empty(i * this.width + this.width + i * difference + j));
                 }
             } 
         } else if (difference < 0) { // if shrinking the board
             for (int i = 0; i < this.height; i++) {
                 for (int j = 0; j > difference; j--) {
-                    this.materialBoard.remove(i * this.width + this.width + i * difference + difference);
+                    this.board.remove(i * this.width + this.width + i * difference + difference);
                 }
             } 
         }
@@ -86,11 +86,11 @@ public class PowderGameBoard {
         int difference = newHeight - this.height;
         if (difference > 0) { // if lengthening the board
             for (int i = 0; i < difference; i++) {
-                this.materialBoard.add(Material.EMPTY);
+                this.board.add(new Empty(i));
             }
         } else if (difference < 0) { // if shortening the board
             for (int i = 0; i > difference; i--) {
-                this.materialBoard.remove(this.materialBoard.size() - 1);
+                this.board.remove(this.board.size() - 1);
             }
         }
     }
@@ -104,6 +104,18 @@ public class PowderGameBoard {
 
     public int posToIndex(int x, int y) {
         return x + this.width * y;
+    }
+
+    public int cellIndexToCheckedIndex(int index) {
+        int[] pos = indexToPos(index);
+        return posToIndex(pos[0]-1, pos[1]-1);
+    }
+
+    public int checkedIndexToCellIndex(int index) {
+        int[] pos = new int[2];
+        pos[0] = index % (this.width - 2); // x
+        pos[1] = index / (this.width - 2); // y
+        return posToIndex(pos[0]+1, pos[1]+1);
     }
 
     public int applyDirToIndex(int index, Direction dir) {
@@ -124,9 +136,53 @@ public class PowderGameBoard {
                 return index + this.width;
             case DR: 
                 return index + this.width + 1;
-            default:
+            default: // case Particle.C
                 return index;
         }
+    }
+
+    public Particle getNearbyParticle(int index, Direction dir) {
+        return this.board.get(this.applyDirToIndex(index, dir));
+    }
+
+    public Particle getCell(int index) {
+        return this.board.get(index);
+    }
+
+    public void setCell(Particle particle) {
+        this.board.set(particle.getIndex(), particle);
+    }
+
+    private void moveCell(int index, Particle particle) {
+        particle.setIndex(index);
+        this.setCell(particle);
+    }
+
+    public void swapCells(int firstIndex, int secondIndex) {
+        Particle temp = this.getCell(secondIndex);
+        this.moveCell(secondIndex, this.getCell(firstIndex));
+        this.moveCell(firstIndex, temp);
+    }
+
+    public void update() {
+        for (Particle particle : this.board) {
+            if (particle.getActive()) {
+                particle.update(this);
+            }
+        }
+    }
+
+    public void readyBoard() {
+        for (Particle particle : this.board) {
+            if (!particle.getActive()) {
+                particle.flipActive();
+            }
+        }
+    }
+
+    public void executeTick() {
+        this.readyBoard();
+        this.update();
     }
 
     @Override
@@ -134,7 +190,7 @@ public class PowderGameBoard {
         String outString = "";
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
-                outString += this.materialBoard.get(posToIndex(x, y)) + " ";
+                outString += this.board.get(posToIndex(x, y)) + " ";
             }
             outString += "\n";
         }
