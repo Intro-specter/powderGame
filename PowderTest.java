@@ -1,3 +1,4 @@
+import java.util.concurrent.TimeUnit;
 public class PowderTest {
     public static void main(String[] args) {
         PowderGameBoard testBoard = new PowderGameBoard();
@@ -6,17 +7,42 @@ public class PowderTest {
         System.out.println(testBoard);
         testBoard.setWidth(5);
         System.out.println(testBoard);
-        testBoard.setWidth(10);
+        testBoard.setWidth(50);
         System.out.println(testBoard);
         testBoard.setHeight(5);
         System.out.println(testBoard);
         testBoard.setHeight(10);
-        
-        testBoard.setCell(new Sand(26));
 
-        System.out.println(testBoard);
-        testBoard.executeTick();
-
+        // Simulation
+        for (int i = 0; i < 120; i++) {
+            testBoard.setCell(new Water((int)(testBoard.getWidth()*1.5)));
+            testBoard.executeTick();
+            System.out.println(testBoard);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+        for (int i = 0; i < 45; i++) {
+            testBoard.setCell(new Sand((int)(testBoard.getWidth()*1.5)));
+            testBoard.executeTick();
+            System.out.println(testBoard);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+        for (int i = 0; i < 75; i++) {
+            testBoard.executeTick();
+            System.out.println(testBoard);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
         System.out.println(testBoard);
     }
 }

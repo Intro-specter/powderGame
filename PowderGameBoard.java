@@ -53,13 +53,14 @@ public class PowderGameBoard {
 
     public void createBarrier() {
         this.board.replaceAll(element -> (element.equals(Material.BARRIER)) ? new Empty(element.getIndex()) : element); // clear BARRIERs from board
+        System.out.println(this.board.size());
         for (int i = 0; i < this.width; i++) { // Floor and ceiling
-            this.board.set(i, new Barrier(i));
-            this.board.set((this.height - 1) * this.width + i, new Barrier((this.height - 1) * this.width + i));
+            this.setCell(new Barrier(i));
+            this.setCell(new Barrier((this.height - 1) * this.width + i));
         }
         for (int j = 1; j < this.height - 1; j++) { // Sides
-            this.board.set(this.width * j, new Barrier(this.width * j));
-            this.board.set(this.width * j + this.width - 1, new Barrier(this.width * j + this.width - 1));
+            this.setCell(new Barrier(this.width * j));
+            this.setCell(new Barrier(this.width * j + this.width - 1));
         }
     }
 
@@ -83,10 +84,10 @@ public class PowderGameBoard {
 
     public void changeBoardHeight(int newHeight) { // to be executed BEFORE setting this.height
         // We insert or remove elements at the end of the board
-        int difference = newHeight - this.height;
+        int difference = (newHeight - this.height) * this.width;
         if (difference > 0) { // if lengthening the board
             for (int i = 0; i < difference; i++) {
-                this.board.add(new Empty(i));
+                this.board.add(new Empty(this.board.size() + 1));
             }
         } else if (difference < 0) { // if shortening the board
             for (int i = 0; i > difference; i--) {
