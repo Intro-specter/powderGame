@@ -1,9 +1,5 @@
 import java.util.ArrayList;
 
-/*
- * TODO: Add an update method to update every cell according to Particle and checkedList
- */
-
 public class PowderGameBoard {
     private ArrayList<Particle> board;
     private int width;
@@ -51,9 +47,12 @@ public class PowderGameBoard {
         this.createBarrier();
     }
 
+    public void wipe() {
+        this.board.replaceAll(element -> (element.equals(Material.BARRIER)) ? element : new Empty(element.getIndex())); // clear non-BARRIERs from board
+    }
+
     public void createBarrier() {
         this.board.replaceAll(element -> (element.equals(Material.BARRIER)) ? new Empty(element.getIndex()) : element); // clear BARRIERs from board
-        System.out.println(this.board.size());
         for (int i = 0; i < this.width; i++) { // Floor and ceiling
             this.setCell(new Barrier(i));
             this.setCell(new Barrier((this.height - 1) * this.width + i));
@@ -80,6 +79,7 @@ public class PowderGameBoard {
                 }
             } 
         }
+        this.assignAllIndices();
     }
 
     public void changeBoardHeight(int newHeight) { // to be executed BEFORE setting this.height
@@ -94,6 +94,7 @@ public class PowderGameBoard {
                 this.board.remove(this.board.size() - 1);
             }
         }
+        this.assignAllIndices();
     }
 
     public int[] indexToPos(int index) {
@@ -105,18 +106,6 @@ public class PowderGameBoard {
 
     public int posToIndex(int x, int y) {
         return x + this.width * y;
-    }
-
-    public int cellIndexToCheckedIndex(int index) {
-        int[] pos = indexToPos(index);
-        return posToIndex(pos[0]-1, pos[1]-1);
-    }
-
-    public int checkedIndexToCellIndex(int index) {
-        int[] pos = new int[2];
-        pos[0] = index % (this.width - 2); // x
-        pos[1] = index / (this.width - 2); // y
-        return posToIndex(pos[0]+1, pos[1]+1);
     }
 
     public int applyDirToIndex(int index, Direction dir) {
@@ -142,6 +131,12 @@ public class PowderGameBoard {
         }
     }
 
+    public void assignAllIndices() {
+        for (int i = 0; i < this.board.size(); i++) {
+            this.getCell(i).setIndex(i);
+        }
+    }
+
     public Particle getNearbyParticle(int index, Direction dir) {
         return this.board.get(this.applyDirToIndex(index, dir));
     }
@@ -163,6 +158,33 @@ public class PowderGameBoard {
         Particle temp = this.getCell(secondIndex);
         this.moveCell(secondIndex, this.getCell(firstIndex));
         this.moveCell(firstIndex, temp);
+    }
+
+    public void attemptPlace(int index, MouseHandler mouseHandler, int radius) {
+        int[] pos = indexToPos(index);
+        for (int i = pos[0] - radius; i < pos[0] + radius + 1; i++) {
+            for (int j = pos[1] - radius; j < pos[1] + radius + 1; j++) {
+                try {
+                    if (this.getCell(this.posToIndex(i, j)).equals(Material.EMPTY) || mouseHandler.getChosenMaterial().equals(Material.EMPTY)) {
+                        switch (mouseHandler.getChosenMaterial()) {
+                            case Material.EMPTY:
+                            this.setCell(new Empty(this.posToIndex(i, j)));
+                                break;
+                            case Material.SAND:
+                            this.setCell(new Sand(this.posToIndex(i, j)));
+                                break;
+                            case Material.WATER:
+                            this.setCell(new Water(this.posToIndex(i, j)));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        }
     }
 
     public void update() {

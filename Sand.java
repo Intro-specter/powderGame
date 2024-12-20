@@ -50,9 +50,10 @@ public class Sand extends Particle {
             default:
                 break;
         }
+        
         if (dlopen) {
             if (dropen) {
-                if (rng.nextInt(2)==1) {
+                if (rng.nextInt(2) == 1) {
                     board.swapCells(this.index, board.applyDirToIndex(this.index, Direction.DL));
                 } else {
                     board.swapCells(this.index, board.applyDirToIndex(this.index, Direction.DR));

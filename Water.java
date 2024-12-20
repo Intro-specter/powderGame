@@ -43,7 +43,7 @@ public class Water extends Particle {
         }
         if (lopen) {
             if (ropen) {
-                if (rng.nextInt(2)==1) {
+                if (rng.nextInt(2) == 1) {
                     board.swapCells(this.index, board.applyDirToIndex(this.index, Direction.L));
                 } else {
                     board.swapCells(this.index, board.applyDirToIndex(this.index, Direction.R));
