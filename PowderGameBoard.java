@@ -1,9 +1,15 @@
 import java.util.ArrayList;
 
+/*
+ * TODO: change update order or something so it's not left to right
+ */
+
 public class PowderGameBoard {
     private ArrayList<Particle> board;
     private int width;
     private int height;
+    private int placingRadius = 1;
+    private boolean reverseUpdateOrder = false;
 
     public PowderGameBoard(int width, int height) {
         this.width = width;
@@ -17,6 +23,14 @@ public class PowderGameBoard {
 
     public PowderGameBoard() {
         this(10, 10);
+    }
+
+    public int getPlacingRadius() {
+        return this.placingRadius;
+    }
+
+    public void setPlacingRadius(int radius) {
+        this.placingRadius = radius;
     }
 
     public ArrayList<Particle> getboard() {
@@ -160,21 +174,27 @@ public class PowderGameBoard {
         this.moveCell(firstIndex, temp);
     }
 
-    public void attemptPlace(int index, MouseHandler mouseHandler, int radius) {
+    public void attemptPlace(int index, MouseHandler mouseHandler) { // TODO: Move the switch case to a different fn
         int[] pos = indexToPos(index);
-        for (int i = pos[0] - radius; i < pos[0] + radius + 1; i++) {
-            for (int j = pos[1] - radius; j < pos[1] + radius + 1; j++) {
+        for (int i = pos[0] - this.placingRadius; i < pos[0] + this.placingRadius + 1; i++) {
+            for (int j = pos[1] - this.placingRadius; j < pos[1] + this.placingRadius + 1; j++) {
                 try {
-                    if (this.getCell(this.posToIndex(i, j)).equals(Material.EMPTY) || mouseHandler.getChosenMaterial().equals(Material.EMPTY)) {
+                    if ((this.getCell(this.posToIndex(i, j)).equals(Material.EMPTY) || mouseHandler.getChosenMaterial().equals(Material.EMPTY)) && !this.getCell(this.posToIndex(i, j)).equals(Material.BARRIER)) {
                         switch (mouseHandler.getChosenMaterial()) {
                             case Material.EMPTY:
-                            this.setCell(new Empty(this.posToIndex(i, j)));
+                                this.setCell(new Empty(this.posToIndex(i, j)));
                                 break;
                             case Material.SAND:
-                            this.setCell(new Sand(this.posToIndex(i, j)));
+                                this.setCell(new Sand(this.posToIndex(i, j)));
                                 break;
                             case Material.WATER:
-                            this.setCell(new Water(this.posToIndex(i, j)));
+                                this.setCell(new Water(this.posToIndex(i, j)));
+                                break;
+                            case Material.CLOUD:
+                                this.setCell(new Cloud(this.posToIndex(i, j)));
+                                break;
+                            case Material.STONE:
+                                this.setCell(new Stone(this.posToIndex(i, j)));
                                 break;
                             default:
                                 break;
@@ -188,16 +208,17 @@ public class PowderGameBoard {
     }
 
     public void update() {
-        for (Particle particle : this.board) {
-            if (particle.getActive()) {
+        for (Particle particle : ((this.reverseUpdateOrder) ? this.board.reversed() : this.board)) {
+            if (particle.isActive()) {
                 particle.update(this);
             }
         }
+        this.reverseUpdateOrder = !this.reverseUpdateOrder;
     }
 
     public void readyBoard() {
         for (Particle particle : this.board) {
-            if (!particle.getActive()) {
+            if (!particle.isActive()) {
                 particle.flipActive();
             }
         }

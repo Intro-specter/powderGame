@@ -6,3 +6,19 @@ Die Simulation beinhaltet (hoffentlich in der Zukunft) ein interaktives Fenster 
 Mit dieser Implementation möchte ich lernen wie man besser ein flexibles und erweiterbares Projekt plant und gestaltet, indem ich neben dem Programmieren mit UML-Diagrammen und Tests arbeite. 
 
 Die Animation und Aufzeichnung verläuft über JPanel, und die Simulation im Hintergrund wird an einer eindimensionalen ArrayList angewendet.
+
+Eingabe: 
+Maus:
+- Left Click: Ausgewähltes Material Plazieren
+- Mouse Wheel Scroll: Skalierung des Rasters
+- Resize Window: Ändert Dimensionen des Rasters
+Tastatur:
+- ESC: Quit
+- Q: Plazierungsradius verkleinern
+- E: Plazierungsradius vergrössern
+- R: Alle Partikel löschen
+- 1: Empty
+- 2: Sand
+- 3: Water
+- 4: Cloud
+- 5: Stone

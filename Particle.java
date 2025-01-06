@@ -24,7 +24,7 @@ public class Particle {
         this.index = index;
     }
 
-    public boolean getActive() {
+    public boolean isActive() {
         return this.active;
     }
 

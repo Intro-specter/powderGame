@@ -1,4 +1,7 @@
-import java.util.Timer;
+/*
+ * TODO: See if checking for things like valid coords in the runtime will make it faster than try catching
+ */
+
 import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
 import java.awt.event.*;
@@ -13,10 +16,8 @@ public class PowderGameWindow {
         final int FRAME_HEIGHT_OFFSET = 0;
         final int X_OFFSET = -8;
         final int Y_OFFSET = -30;
-        final int MILLISECONDS_PER_FRAME = 10;
+        final int MILLISECONDS_PER_FRAME = 5;
         final boolean START_PAUSED = false;
-
-        int placingRadius = 3;
 
         PowderGameBoard board = new PowderGameBoard(INIT_HEIGHT, INIT_HEIGHT);
         Painter pixelPainter = new Painter(board, INIT_SCALE, START_PAUSED);
@@ -42,6 +43,11 @@ public class PowderGameWindow {
                 if(e.getKeyCode() == KeyEvent.VK_SPACE){ // pause updates with SPACE
                     pixelPainter.flipPaused();
                 }
+                if(e.getKeyCode() == KeyEvent.VK_Q){ // decrease placing radius with Q
+                    board.setPlacingRadius((board.getPlacingRadius() > 0) ? board.getPlacingRadius() - 1 : board.getPlacingRadius());
+                } else if(e.getKeyCode() == KeyEvent.VK_E){ // increase placing radius with E
+                    board.setPlacingRadius((board.getPlacingRadius() < 10) ? board.getPlacingRadius() + 1 : board.getPlacingRadius());
+                }
 
                 if(e.getKeyCode() == KeyEvent.VK_1){ 
                     mouseHandler.setChosenMaterial(Material.EMPTY);
@@ -49,6 +55,10 @@ public class PowderGameWindow {
                     mouseHandler.setChosenMaterial(Material.SAND);
                 } else if(e.getKeyCode() == KeyEvent.VK_3){ 
                     mouseHandler.setChosenMaterial(Material.WATER);
+                } else if(e.getKeyCode() == KeyEvent.VK_4){ 
+                    mouseHandler.setChosenMaterial(Material.CLOUD);
+                } else if(e.getKeyCode() == KeyEvent.VK_5){ 
+                    mouseHandler.setChosenMaterial(Material.STONE);
                 }
             }
         });
@@ -66,20 +76,12 @@ public class PowderGameWindow {
         int leftInset = frame.getInsets().left;
         int rightInset = frame.getInsets().right;
 
-        for (int i = (int)(board.getWidth()*1.5)-15; i < (int)(board.getWidth()*1.5)+15; i++) {
-            for (int j = 1; j < 11; j++) {
-                board.setCell(new Sand(board.posToIndex(i, j)));
-            }
-        }
-
         while (true) {
-            if (Math.abs((frame.getWidth() + FRAME_WIDTH_OFFSET - leftInset - rightInset) - (board.getWidth() * pixelPainter.getScale())) > 2) {
+            if (Math.abs((frame.getWidth() + FRAME_WIDTH_OFFSET - leftInset - rightInset) - (board.getWidth() * pixelPainter.getScale())) > 0) {
                 board.setWidth((frame.getWidth() + FRAME_WIDTH_OFFSET - leftInset - rightInset) / pixelPainter.getScale());
-                continue;
             }
-            if (Math.abs((frame.getHeight() + FRAME_HEIGHT_OFFSET - topInset - bottomInset) - (board.getHeight() * pixelPainter.getScale())) > 2) {
+            if (Math.abs((frame.getHeight() + FRAME_HEIGHT_OFFSET - topInset - bottomInset) - (board.getHeight() * pixelPainter.getScale())) > 0) {
                 board.setHeight((frame.getHeight() + FRAME_HEIGHT_OFFSET - topInset - bottomInset) / pixelPainter.getScale());
-                continue;
             }
 
             // change scale with scrolling
@@ -95,7 +97,7 @@ public class PowderGameWindow {
             }
 
             if (mouseHandler.isActive()) {
-                board.attemptPlace(board.posToIndex((mouseHandler.getX() + X_OFFSET)/pixelPainter.getScale(), (mouseHandler.getY() + Y_OFFSET)/pixelPainter.getScale()), mouseHandler, placingRadius);
+                board.attemptPlace(board.posToIndex((mouseHandler.getX() + X_OFFSET)/pixelPainter.getScale(), (mouseHandler.getY() + Y_OFFSET)/pixelPainter.getScale()), mouseHandler);
             }
 
             if (!pixelPainter.isPaused()) {

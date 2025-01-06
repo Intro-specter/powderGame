@@ -1,0 +1,127 @@
+classDiagram
+    class Material
+    <<Enumeration>> Material
+    Material : BARRIER
+    Material : EMPTY
+    Material : SAND
+    Material : WATER
+    Material : CLOUD
+    Material : STONE
+    Material : Color EMPTY_COLOR
+    Material : Color BARRIER_COLOR
+    Material : Color SAND_COLOR
+    Material : Color WATER_COLOR
+    Material : Color CLOUD_COLOR
+    Material : Color STONE_COLOR
+    Material : String ANSI_RESET
+    Material : String ANSI_BLUE
+    Material : String ANSI_YELLOW
+    Material : +toColor()
+    Material : +toString()
+    
+    Material --> Particle
+    Particle : #Material material
+    Particle : #int index
+    Particle : #boolean active
+    Particle : +getMaterial()
+    Particle : +getIndex()
+    Particle : +setIndex(int index)
+    Particle : +isActive()
+    Particle : +setActive(boolean active)
+    Particle : +flipActive()
+    Particle : +update(PowderGameBoard board)
+    Particle : +hasAttribute(String attributeName)
+    Particle : +equals(Particle other)
+    Particle : +equals(Material other)
+    Particle : +toString()
+
+    Particle <|-- Empty
+
+    Particle <|-- Barrier
+
+    Particle <|-- Sand
+    Sand : -Random rng
+    Sand : +canSwap(Material otherMaterial)
+    Sand : +canCompress(PowderGameBoard board)
+    Sand : +update(PowderGameBoard board)
+
+    Particle <|-- Water
+    Water : -Random rng
+    Water : +canSwap(Material otherMaterial)
+    Water : +update(PowderGameBoard board)
+
+    Particle <|-- Cloud
+    Cloud : -Random rng
+    Cloud : +canSwap(Material otherMaterial)
+    Cloud : +update(PowderGameBoard board)
+
+    Particle <|-- Stone
+    Stone : -Random rng
+    Stone : +canSwap(Material otherMaterial)
+    Stone : +update(PowderGameBoard board)
+
+    Particle --> PowderGameBoard
+    PowderGameBoard : -ArrayList<Particle> board
+    PowderGameBoard : -int width
+    PowderGameBoard : -int height
+    PowderGameBoard : +getSize()
+    PowderGameBoard : +getWidth()
+    PowderGameBoard : +setWidth(int width)
+    PowderGameBoard : +getHeight()
+    PowderGameBoard : +setHeight(int height)
+    PowderGameBoard : +createBarrier()
+    PowderGameBoard : +changeBoardWidth(int newWidth)
+    PowderGameBoard : +changeBoardHeight(int newHeight)
+    PowderGameBoard : +indexToPos(int index)
+    PowderGameBoard : +posToIndex(int x, int y)
+    PowderGameBoard : +applyDirToIndex(int index, Direction dir)
+    PowderGameBoard : +getNearbyParticle(int index, Direction dir)
+    PowderGameBoard : +getCell(int index)
+    PowderGameBoard : +setCell(Particle particle)
+    PowderGameBoard : +moveCell(int index, Particle particle)
+    PowderGameBoard : +swapCells(int firstIndex, int secondIndex)
+    PowderGameBoard : +update()
+    PowderGameBoard : +readyBoard()
+    PowderGameBoard : +executeTick()
+    PowderGameBoard : +toString()
+
+    PowderGameBoard --> PowderTest
+    PowderTest : +main(String[] args)
+
+    PowderGameBoard --> PowderGameWindow
+    PowderGameWindow : +main(String[] args)
+
+    WheelListener --> PowderGameWindow
+    WheelListener : -int moveDir
+    WheelListener : +getMoveDir()
+    WheelListener : +setMoveDir(int inMoveDir)
+    WheelListener : +resetMoveDir()
+    WheelListener : +mouseWheelMoved(MouseWheelEvent e)
+
+    MouseHandler --> PowderGameWindow
+    MouseHandler : -int x
+    MouseHandler : -int y
+    MouseHandler : -boolean active
+    MouseHandler : +getX()
+    MouseHandler : +setX(int inX)
+    MouseHandler : +getY()
+    MouseHandler : +setY(int inY)
+    MouseHandler : +setPos(int inX, int inY)
+    MouseHandler : +getState()
+    MouseHandler : +setState(boolean inState)
+    MouseHandler : +mousePressed(MouseEvent e)
+    MouseHandler : +mouseReleased(MouseEvent e)
+    MouseHandler : +mouseEntered(MouseEvent e)
+    MouseHandler : +mouseExited(MouseEvent e)
+    MouseHandler : +mouseClicked(MouseEvent e)
+
+    Painter --> PowderGameWindow
+    Painter : -PowderGameBoard parentBoard
+    Painter : -int scale
+    Painter : -boolean paused
+    Painter : +isPaused()
+    Painter : +setPaused(boolean paused)
+    Painter : +flipPaused()
+    Painter : +getScale()
+    Painter : +setScale(int scale)
+    Painter : +paintComponents(Graphics g)
