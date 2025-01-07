@@ -1,3 +1,8 @@
+/*
+ * TODO: Try a temperature variable to influence condensation
+ *     TODO: Add freezing into ice
+ */
+
 import java.util.Random;
 
 public class Water extends Particle {
@@ -24,7 +29,7 @@ public class Water extends Particle {
         }
     }
 
-    public void update(PowderGameBoard board) { // TODO: Add ability to turn Stone to Sand
+    public void update(PowderGameBoard board) {
         this.flipActive();
 
         Particle downParticle = board.getCell(board.applyDirToIndex(this.index, Direction.D)); 

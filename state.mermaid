@@ -1,0 +1,21 @@
+stateDiagram-v2
+    state evaporate <<choice>>
+    state condense <<choice>>
+    state compress <<choice>>
+    state weather <<choice>>
+    [*] --> Empty: generate
+    [*] --> Barrier: generate
+    Sand --> Empty: delete
+    Sand --> compress
+    Stone --> weather
+    Stone --> Empty: delete
+    Water --> Empty: delete
+    Water --> evaporate
+    Water --> weather
+    Cloud --> Empty: delete
+    Cloud --> condense
+    evaporate --> Cloud: evaporate
+    condense --> Water: condense
+    compress --> Stone: compress
+    weather --> Sand: weather
+    Barrier

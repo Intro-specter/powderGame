@@ -31,7 +31,7 @@ public class Sand extends Particle {
         return false;
     }
 
-    public void update(PowderGameBoard board) { // TODO: Add ability to compress into Stone
+    public void update(PowderGameBoard board) {
         this.flipActive();
 
         if (this.canCompress(board)) {
