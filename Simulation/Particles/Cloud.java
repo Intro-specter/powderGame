@@ -1,4 +1,9 @@
+package Simulation.Particles;
 import java.util.Random;
+
+import Simulation.Direction;
+import Simulation.Material;
+import Simulation.PowderGameBoard;
 
 public class Cloud extends Particle {
     private static Random rng = new Random();

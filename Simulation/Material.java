@@ -1,3 +1,4 @@
+package Simulation;
 import java.awt.Color;
 
 public enum Material {

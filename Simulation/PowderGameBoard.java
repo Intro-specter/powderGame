@@ -1,4 +1,14 @@
+package Simulation;
 import java.util.ArrayList;
+
+import GUI.MouseHandler;
+import Simulation.Particles.Barrier;
+import Simulation.Particles.Cloud;
+import Simulation.Particles.Empty;
+import Simulation.Particles.Particle;
+import Simulation.Particles.Sand;
+import Simulation.Particles.Stone;
+import Simulation.Particles.Water;
 
 /*
  * TODO: change update order or something so it's not left to right

@@ -1,9 +1,14 @@
+package Simulation.Particles;
 /*
  * TODO: Try a temperature variable to influence condensation
  *     TODO: Add freezing into ice
  */
 
 import java.util.Random;
+
+import Simulation.Direction;
+import Simulation.Material;
+import Simulation.PowderGameBoard;
 
 public class Water extends Particle {
     private static Random rng = new Random();

@@ -1,3 +1,4 @@
+package Simulation.Particles;
 /*
  * Currently, for things like the canSwap() fn of subclasses, I use switch cases for unique behaviour
  * respective to each other material, which creates exponential complexity. I might try putting some intermediate
@@ -7,6 +8,9 @@
  */
 
 import java.lang.reflect.Field;
+
+import Simulation.Material;
+import Simulation.PowderGameBoard;
 
 public class Particle {
     protected Material material;

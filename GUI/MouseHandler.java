@@ -1,5 +1,8 @@
+package GUI;
 import java.awt.event.*;
 import java.awt.event.MouseAdapter;
+
+import Simulation.Material;
 
 public class MouseHandler extends MouseAdapter {
     private final int X_OFFSET = 0;

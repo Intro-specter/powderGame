@@ -1,4 +1,8 @@
+package GUI;
 import javax.swing.JPanel;
+
+import Simulation.PowderGameBoard;
+
 import java.awt.*;
 
 public class Painter extends JPanel {

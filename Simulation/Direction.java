@@ -1,3 +1,4 @@
+package Simulation;
 public enum Direction {
     UL, 
     U, 

@@ -1,3 +1,5 @@
+package GUI;
+
 /*
  * TODO: Comment things fr
  *
@@ -18,6 +20,9 @@
 import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import Simulation.Material;
+import Simulation.PowderGameBoard;
 
 import java.awt.Dimension;
 import java.awt.event.*;

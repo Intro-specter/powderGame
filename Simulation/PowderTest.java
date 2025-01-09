@@ -1,4 +1,8 @@
+package Simulation;
 import java.util.concurrent.TimeUnit;
+
+import Simulation.Particles.Sand;
+import Simulation.Particles.Water;
 public class PowderTest {
     public static void main(String[] args) {
         PowderGameBoard testBoard = new PowderGameBoard();
