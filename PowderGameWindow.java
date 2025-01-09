@@ -1,9 +1,25 @@
 /*
- * TODO: See if checking for things like valid coords in the runtime will make it faster than try catching
+ * TODO: Comment things fr
+ *
+ * The main function here implements all the graphics and game logic at once, 
+ * which is tough to debug.
+ * TODO: Compartmentalize main fn
+ * TODO: Separate Graphics, Input, and Game Logic into Threads
+ * 
+ * Known issues at runtime:
+ * - Index out of range exception when PowderGameBoard.attemptPlace() would 
+ *   attempt to place outside bounds (top or bottom of screen)
+ *     - Additional side effect that causes wrap-around 
+ *       on the sides for placing (because the game is stored in a 1D-array)
+ * - Flickering edges when paused, presumably because PowderGameBoard.createBarrier() 
+ *   is constantly getting called for some reason.
  */
 
 import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import java.awt.Dimension;
 import java.awt.event.*;
 
 public class PowderGameWindow {
@@ -16,11 +32,12 @@ public class PowderGameWindow {
         final int FRAME_HEIGHT_OFFSET = 0;
         final int X_OFFSET = -8;
         final int Y_OFFSET = -30;
-        final int MILLISECONDS_PER_FRAME = 5;
+        final int INIT_MILLISECONDS_PER_FRAME = 8;
         final boolean START_PAUSED = false;
+        final int MAX_SCALE = 20;
 
         PowderGameBoard board = new PowderGameBoard(INIT_HEIGHT, INIT_HEIGHT);
-        Painter pixelPainter = new Painter(board, INIT_SCALE, START_PAUSED);
+        Painter pixelPainter = new Painter(board, INIT_SCALE, START_PAUSED, INIT_MILLISECONDS_PER_FRAME);
         MouseHandler mouseHandler = new MouseHandler();
         mouseHandler.setMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
@@ -43,6 +60,15 @@ public class PowderGameWindow {
                 if(e.getKeyCode() == KeyEvent.VK_SPACE){ // pause updates with SPACE
                     pixelPainter.flipPaused();
                 }
+                if (e.getKeyCode() == KeyEvent.VK_O && pixelPainter.getMSPerFrame() > 1){
+                    pixelPainter.setMSPerFrame(pixelPainter.getMSPerFrame()/2);
+                } else if (e.getKeyCode() == KeyEvent.VK_P && pixelPainter.getMSPerFrame() == 0){
+                    pixelPainter.setMSPerFrame(1);
+                } else if (e.getKeyCode() == KeyEvent.VK_P && pixelPainter.getMSPerFrame() < 257){
+                    pixelPainter.setMSPerFrame(pixelPainter.getMSPerFrame()*2);
+                } else if (e.getKeyCode() == KeyEvent.VK_O && pixelPainter.getMSPerFrame() == 1){
+                    pixelPainter.setMSPerFrame(0);
+                }
                 if(e.getKeyCode() == KeyEvent.VK_Q){ // decrease placing radius with Q
                     board.setPlacingRadius((board.getPlacingRadius() > 0) ? board.getPlacingRadius() - 1 : board.getPlacingRadius());
                 } else if(e.getKeyCode() == KeyEvent.VK_E){ // increase placing radius with E
@@ -63,13 +89,19 @@ public class PowderGameWindow {
             }
         });
 
+        frame.setSize(INIT_WIDTH*INIT_SCALE, INIT_HEIGHT*INIT_SCALE);
+        frame.setMinimumSize(new Dimension(400, 100));
+
         frame.add(pixelPainter);
         frame.addMouseListener(mouseHandler);
         frame.addMouseMotionListener(mouseHandler.getMotionListener());
         frame.addMouseWheelListener(wheelListener);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        frame.setSize(INIT_WIDTH*INIT_SCALE, INIT_HEIGHT*INIT_SCALE);
+
+        JLabel dataLabel = new JLabel();
+        dataLabel.setText("Hello, World");
+        pixelPainter.add(dataLabel);
 
         int topInset = frame.getInsets().top;
         int bottomInset = frame.getInsets().bottom;
@@ -87,11 +119,11 @@ public class PowderGameWindow {
             // change scale with scrolling
             switch (wheelListener.getMoveDir()) {
                 case -1: //UP
-                    pixelPainter.setScale(pixelPainter.getScale() + 1);
+                    pixelPainter.setScale((pixelPainter.getScale() < MAX_SCALE) ? pixelPainter.getScale() + 1 : pixelPainter.getScale());
                     wheelListener.setMoveDir(0);;
                     break;
                 case 1: //DOWN
-                    pixelPainter.setScale((pixelPainter.getScale() > 2) ? pixelPainter.getScale() - 1 : pixelPainter.getScale());
+                    pixelPainter.setScale((pixelPainter.getScale() > 1) ? pixelPainter.getScale() - 1 : pixelPainter.getScale());
                     wheelListener.setMoveDir(0);;
                     break;   
             }
@@ -103,11 +135,13 @@ public class PowderGameWindow {
             if (!pixelPainter.isPaused()) {
                 board.executeTick();
                 try {
-                    TimeUnit.MILLISECONDS.sleep(MILLISECONDS_PER_FRAME);
+                    TimeUnit.MILLISECONDS.sleep(pixelPainter.getMSPerFrame());
                 } catch(Exception e) {
                     System.out.println(e);
                 }
             }
+
+            dataLabel.setText("Selected Material: " + mouseHandler.getChosenMaterial().getName() + ", Placing Radius: " + board.getPlacingRadius() + ", Paused: " + pixelPainter.isPaused() + ", Sim Speed: " + pixelPainter.getMSPerFrame() + ", Board Dimensions: (" + board.getWidth() + "," + board.getHeight() + "), Cell Scale: " + pixelPainter.getScale());
 
             frame.repaint();
         }

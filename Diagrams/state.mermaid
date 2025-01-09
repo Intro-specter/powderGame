@@ -1,0 +1,34 @@
+stateDiagram-v2
+    state evaporate <<choice>> %% water to cloud
+    state condense <<choice>> %% cloud to water
+    state compress <<choice>> %% sand to stone
+    state weather <<choice>> %% stone to sand
+    state melt <<choice>> %% ice to water
+    state freeze <<choice>> %% water to ice
+    state sand_melt <<choice>> %% sand to lava
+    state lava_freeze <<choice>> %% lava to stone
+    [*] --> Empty: generate
+    [*] --> Barrier: generate
+    Sand --> Empty: delete
+    Sand --> compress
+    Sand --> sand_melt
+    Stone --> weather
+    Stone --> Empty: delete
+    Lava --> Empty: delete
+    Lava --> lava_freeze
+    Water --> Empty: delete
+    Water --> evaporate
+    Water --> weather
+    Water --> freeze
+    Cloud --> Empty: delete
+    Cloud --> condense
+    Ice --> Empty: delete
+    Ice --> melt
+    evaporate --> Cloud: evaporate
+    condense --> Water: condense
+    compress --> Stone: compress
+    weather --> Sand: weather
+    melt --> Water: melt
+    freeze --> Ice: freeze
+    sand_melt --> Lava: melt
+    lava_freeze --> Stone: freeze

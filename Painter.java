@@ -5,11 +5,21 @@ public class Painter extends JPanel {
     private PowderGameBoard parentBoard;
     private int scale;
     private boolean paused;
+    private int milliseconds_per_frame;
 
-    public Painter(PowderGameBoard inBoard, int scale, boolean paused) {
+    public Painter(PowderGameBoard inBoard, int scale, boolean paused, int milliseconds_per_frame) {
         this.parentBoard = inBoard;
         this.scale = scale;
         this.paused = paused;
+        this.milliseconds_per_frame = milliseconds_per_frame;
+    }
+
+    public int getMSPerFrame() {
+        return this.milliseconds_per_frame;
+    }
+
+    public void setMSPerFrame(int mspf) {
+        this.milliseconds_per_frame = mspf;
     }
 
     public boolean isPaused() {

@@ -38,6 +38,25 @@ public enum Material {
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_YELLOW = "\u001B[33m";
 
+    public String getName() {
+        switch (this) {
+            case EMPTY:
+                return "Empty / (Del)";
+            case BARRIER:
+                return "Barrier";
+            case SAND:
+                return "Sand";
+            case WATER:
+                return "Water";
+            case CLOUD:
+                return "Cloud";
+            case STONE:
+                return "Stone";
+            default:
+                return "?";
+        }
+    }
+
     @Override
     public String toString() {
         switch (this) {

@@ -7,16 +7,21 @@ Mit dieser Implementation möchte ich lernen wie man besser ein flexibles und er
 
 Die Animation und Aufzeichnung verläuft über JPanel, und die Simulation im Hintergrund wird an einer eindimensionalen ArrayList angewendet.
 
-Eingabe: 
+Eingabeanweisungen: 
+
 Maus:
-- Left Click: Ausgewähltes Material Plazieren
+- Left Click (& Drag): Ausgewähltes Material Plazieren
 - Mouse Wheel Scroll: Skalierung des Rasters
 - Resize Window: Ändert Dimensionen des Rasters
+
 Tastatur:
 - ESC: Quit
 - Q: Plazierungsradius verkleinern
 - E: Plazierungsradius vergrössern
 - R: Alle Partikel löschen
+- O: Simulation verschnellern
+- P: Simulation verlangsamen
+- SPACE: Simulation pausieren
 - 1: Empty
 - 2: Sand
 - 3: Water
