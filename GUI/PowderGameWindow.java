@@ -40,6 +40,7 @@ public class PowderGameWindow {
         final int INIT_MILLISECONDS_PER_FRAME = 8;
         final boolean START_PAUSED = false;
         final int MAX_SCALE = 20;
+        final int MIN_SCALE = 1;
 
         PowderGameBoard board = new PowderGameBoard(INIT_HEIGHT, INIT_HEIGHT);
         Painter pixelPainter = new Painter(board, INIT_SCALE, START_PAUSED, INIT_MILLISECONDS_PER_FRAME);
@@ -90,6 +91,10 @@ public class PowderGameWindow {
                     mouseHandler.setChosenMaterial(Material.CLOUD);
                 } else if(e.getKeyCode() == KeyEvent.VK_5){ 
                     mouseHandler.setChosenMaterial(Material.STONE);
+                } else if(e.getKeyCode() == KeyEvent.VK_6){ 
+                    mouseHandler.setChosenMaterial(Material.ICE);
+                } else if(e.getKeyCode() == KeyEvent.VK_7){ 
+                    mouseHandler.setChosenMaterial(Material.LAVA);
                 }
             }
         });
@@ -128,13 +133,13 @@ public class PowderGameWindow {
                     wheelListener.setMoveDir(0);;
                     break;
                 case 1: //DOWN
-                    pixelPainter.setScale((pixelPainter.getScale() > 1) ? pixelPainter.getScale() - 1 : pixelPainter.getScale());
+                    pixelPainter.setScale((pixelPainter.getScale() > MIN_SCALE) ? pixelPainter.getScale() - 1 : pixelPainter.getScale());
                     wheelListener.setMoveDir(0);;
                     break;   
             }
 
             if (mouseHandler.isActive()) {
-                board.attemptPlace(board.posToIndex((mouseHandler.getX() + X_OFFSET)/pixelPainter.getScale(), (mouseHandler.getY() + Y_OFFSET)/pixelPainter.getScale()), mouseHandler);
+                board.attemptPlace(board.vecToIndex((mouseHandler.getX() + X_OFFSET)/pixelPainter.getScale(), (mouseHandler.getY() + Y_OFFSET)/pixelPainter.getScale()), mouseHandler);
             }
 
             if (!pixelPainter.isPaused()) {

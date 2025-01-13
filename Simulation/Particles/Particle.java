@@ -5,8 +5,11 @@ package Simulation.Particles;
  * classes or attributes in to differentiate powders, liquids and gases and then define behaviour according
  * to traits like density, velocity, temperature, etc. though this requires a complete overhaul of the
  * current particle simulation.
+ * 
+ * TODO: make board a static attribute instead of a parameter
  */
 
+import java.awt.Color;
 import java.lang.reflect.Field;
 
 import Simulation.Material;
@@ -68,6 +71,14 @@ public class Particle {
 
     public boolean equals(Material other) {
         return this.material == other;
+    }
+
+    public Color getColor() {
+        return this.material.toColor();
+    }
+
+    public String getName() {
+        return this.material.getName();
     }
 
     @Override

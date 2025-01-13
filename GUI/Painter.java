@@ -52,7 +52,7 @@ public class Painter extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         for (int i = 0; i < this.parentBoard.getHeight(); i++) {
             for (int j = 0; j < this.parentBoard.getWidth(); j++) {
-                g2d.setColor(this.parentBoard.getCell(this.parentBoard.posToIndex(j, i)).getMaterial().toColor());
+                g2d.setColor(this.parentBoard.getCell(this.parentBoard.vecToIndex(j, i)).getColor());
                 g2d.fillRect(j*this.scale, i*this.scale, this.scale, this.scale);
             }
         }

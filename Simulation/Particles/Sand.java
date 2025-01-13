@@ -8,7 +8,6 @@ import Simulation.PowderGameBoard;
 public class Sand extends Particle {
     private static Random rng = new Random();
     private static final int WATER_SWAP_CHANCE = 20;
-    private static final int COMPRESS_TO_STONE_CHANCE = 10000;
 
     public Sand(int index) {
         super(Material.SAND, index);
@@ -27,21 +26,8 @@ public class Sand extends Particle {
         }
     }
 
-    public boolean canCompress(PowderGameBoard board) {
-        Particle downParticle = board.getNearbyParticle(this.index, Direction.D);
-        Particle upParticle = board.getNearbyParticle(this.index, Direction.U);
-        if ((downParticle.getMaterial() == Material.BARRIER || downParticle.getMaterial() == Material.SAND) && (upParticle.getMaterial() == Material.BARRIER || upParticle.getMaterial() == Material.SAND)) {
-            return rng.nextInt(COMPRESS_TO_STONE_CHANCE) == 0;
-        }
-        return false;
-    }
-
     public void update(PowderGameBoard board) {
         this.flipActive();
-
-        if (this.canCompress(board)) {
-            board.setCell(new Stone(this.index));
-        }
 
         Particle downParticle = board.getCell(board.applyDirToIndex(this.index, Direction.D)); 
         if (this.canSwap(downParticle.getMaterial())) {

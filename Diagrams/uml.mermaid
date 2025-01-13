@@ -7,16 +7,24 @@ classDiagram
     Material : WATER
     Material : CLOUD
     Material : STONE
+    Material : ICE
+    Material : LAVA
     Material : Color EMPTY_COLOR
     Material : Color BARRIER_COLOR
     Material : Color SAND_COLOR
     Material : Color WATER_COLOR
+    Material : Color WATER_COLOR_ALT
     Material : Color CLOUD_COLOR
+    Material : Color CLOUD_COLOR_ALT
     Material : Color STONE_COLOR
+    Material : Color LAVA_COLOR
+    Material : Color LAVA_COLOR_ALT
+    Material : Color ICE_COLOR
     Material : String ANSI_RESET
     Material : String ANSI_BLUE
     Material : String ANSI_YELLOW
     Material : +toColor()
+    Material : +getName()
     Material : +toString()
     
     Material --> Particle
@@ -33,6 +41,7 @@ classDiagram
     Particle : +hasAttribute(String attributeName)
     Particle : +equals(Particle other)
     Particle : +equals(Material other)
+    Particle : +getName()
     Particle : +toString()
 
     Particle <|-- Empty
@@ -59,6 +68,18 @@ classDiagram
     Stone : -Random rng
     Stone : +canSwap(Material otherMaterial)
     Stone : +update(PowderGameBoard board)
+
+    Particle <|-- Ice
+    Ice : -Random rng
+    Ice : +canSwap(Material otherMaterial)
+    Ice : +neighbourInteraction(PowderGameBoard board)
+    Ice : +update(PowderGameBoard board)
+
+    Particle <|-- Lava
+    Lava : -Random rng
+    Lava : +canSwap(Material otherMaterial)
+    Lava : +neighbourInteraction(PowderGameBoard board)
+    Lava : +update(PowderGameBoard board)
 
     Particle --> PowderGameBoard
     PowderGameBoard : -ArrayList<Particle> board

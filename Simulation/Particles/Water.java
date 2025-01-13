@@ -1,7 +1,6 @@
 package Simulation.Particles;
 /*
- * TODO: Try a temperature variable to influence condensation
- *     TODO: Add freezing into ice
+ * TODO: Try a temperature variable to influence condensation and freezing
  */
 
 import java.util.Random;
@@ -14,7 +13,9 @@ public class Water extends Particle {
     private static Random rng = new Random();
     private static final int CLOUD_SWAP_CHANCE = 10;
     private static final int SAND_SWAP_CHANCE = 500;
-    private static final int EVAPORATE_CHANCE = 200;
+    private static final int ICE_SWAP_CHANCE = 5;
+    private static final int EVAPORATE_CHANCE = 2000;
+    private static final int FREEZE_TO_ICE_CHANCE = 5000;
     private static final int WEATHER_STONE_CHANCE = 1000;
 
     public Water(int index) {
@@ -29,6 +30,8 @@ public class Water extends Particle {
                 return rng.nextInt(SAND_SWAP_CHANCE) == 0;
             case Material.CLOUD:
                 return rng.nextInt(CLOUD_SWAP_CHANCE) == 0;
+            case Material.ICE:
+                return rng.nextInt(ICE_SWAP_CHANCE) == 0;
             default:
                 return false;
         }
@@ -56,9 +59,14 @@ public class Water extends Particle {
             return;
         }
 
-        if (downParticle.getMaterial() == Material.WATER && leftParticle.getMaterial() == Material.WATER && rightParticle.getMaterial() == Material.WATER && board.getCell(board.applyDirToIndex(this.index, Direction.U)).getMaterial() == Material.EMPTY && rng.nextInt(EVAPORATE_CHANCE) == 0) {
-            board.setCell(new Cloud(this.index));
-            return;
+        if (board.getCell(board.applyDirToIndex(this.index, Direction.U)).getMaterial() == Material.EMPTY) {
+            if (rng.nextInt(EVAPORATE_CHANCE) == 0) {
+                board.setCell(new Cloud(this.index));
+                return;
+            } else if (rng.nextInt(FREEZE_TO_ICE_CHANCE) == 0) {
+                board.setCell(new Ice(this.index));
+                return;
+            }
         }
 
         if (this.canSwap(leftParticle.getMaterial())) {

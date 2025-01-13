@@ -1,14 +1,11 @@
 package Simulation;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import GUI.MouseHandler;
 import Simulation.Particles.Barrier;
-import Simulation.Particles.Cloud;
 import Simulation.Particles.Empty;
 import Simulation.Particles.Particle;
-import Simulation.Particles.Sand;
-import Simulation.Particles.Stone;
-import Simulation.Particles.Water;
 
 /*
  * TODO: change update order or something so it's not left to right
@@ -19,7 +16,6 @@ public class PowderGameBoard {
     private int width;
     private int height;
     private int placingRadius = 1;
-    private boolean reverseUpdateOrder = false;
 
     public PowderGameBoard(int width, int height) {
         this.width = width;
@@ -121,38 +117,42 @@ public class PowderGameBoard {
         this.assignAllIndices();
     }
 
-    public int[] indexToPos(int index) {
-        int[] pos = new int[2];
-        pos[0] = index % this.width; // x
-        pos[1] = index / this.width; // y
-        return pos;
+    public int[] indexToVec(int index) {
+        int[] vec = new int[2];
+        vec[0] = index % this.width; // x
+        vec[1] = index / this.width; // y
+        return vec;
     }
 
-    public int posToIndex(int x, int y) {
+    public int vecToIndex(int x, int y) {
         return x + this.width * y;
     }
 
-    public int applyDirToIndex(int index, Direction dir) {
+    public int dirToIndex(Direction dir) {
         switch (dir) {
             case UL:
-                return index - this.width - 1;
+                return -this.width - 1;
             case U:
-                return index - this.width;
+                return -this.width;
             case UR:
-                return index - this.width + 1; 
+                return -this.width + 1; 
             case L:
-                return index - 1;
+                return -1;
             case R:
-                return index + 1;
+                return 1;
             case DL:
-                return index + this.width - 1;
+                return this.width - 1;
             case D:
-                return index + this.width;
+                return this.width;
             case DR: 
-                return index + this.width + 1;
-            default: // case Particle.C
-                return index;
+                return this.width + 1;
+            default:
+                return 0;
         }
+    }
+
+    public int applyDirToIndex(int index, Direction dir) {
+        return index + dirToIndex(dir);
     }
 
     public void assignAllIndices() {
@@ -184,31 +184,13 @@ public class PowderGameBoard {
         this.moveCell(firstIndex, temp);
     }
 
-    public void attemptPlace(int index, MouseHandler mouseHandler) { // TODO: Move the switch case to a different fn
-        int[] pos = indexToPos(index);
-        for (int i = pos[0] - this.placingRadius; i < pos[0] + this.placingRadius + 1; i++) {
-            for (int j = pos[1] - this.placingRadius; j < pos[1] + this.placingRadius + 1; j++) {
+    public void attemptPlace(int index, MouseHandler mouseHandler) {
+        int[] vec = indexToVec(index);
+        for (int i = vec[0] - this.placingRadius; i < vec[0] + this.placingRadius + 1; i++) {
+            for (int j = vec[1] - this.placingRadius; j < vec[1] + this.placingRadius + 1; j++) {
                 try {
-                    if ((this.getCell(this.posToIndex(i, j)).equals(Material.EMPTY) || mouseHandler.getChosenMaterial().equals(Material.EMPTY)) && !this.getCell(this.posToIndex(i, j)).equals(Material.BARRIER)) {
-                        switch (mouseHandler.getChosenMaterial()) {
-                            case Material.EMPTY:
-                                this.setCell(new Empty(this.posToIndex(i, j)));
-                                break;
-                            case Material.SAND:
-                                this.setCell(new Sand(this.posToIndex(i, j)));
-                                break;
-                            case Material.WATER:
-                                this.setCell(new Water(this.posToIndex(i, j)));
-                                break;
-                            case Material.CLOUD:
-                                this.setCell(new Cloud(this.posToIndex(i, j)));
-                                break;
-                            case Material.STONE:
-                                this.setCell(new Stone(this.posToIndex(i, j)));
-                                break;
-                            default:
-                                break;
-                        }
+                    if ((this.getCell(this.vecToIndex(i, j)).equals(Material.EMPTY) || mouseHandler.getChosenMaterial().equals(Material.EMPTY)) && !this.getCell(this.vecToIndex(i, j)).equals(Material.BARRIER)) {
+                        this.setCell(mouseHandler.getChosenMaterial().toParticle(this.vecToIndex(i, j)));
                     }
                 } catch (Exception e) {
                     System.out.println(e);
@@ -218,12 +200,14 @@ public class PowderGameBoard {
     }
 
     public void update() {
-        for (Particle particle : ((this.reverseUpdateOrder) ? this.board.reversed() : this.board)) {
+        @SuppressWarnings("unchecked") // <-- sign of very good programming 👍👍👍
+        ArrayList<Particle> copyBoard = (ArrayList<Particle>) this.board.clone();
+        Collections.shuffle(copyBoard); // update the array in a random order
+        for (Particle particle : copyBoard) {
             if (particle.isActive()) {
                 particle.update(this);
             }
         }
-        this.reverseUpdateOrder = !this.reverseUpdateOrder;
     }
 
     public void readyBoard() {
@@ -244,7 +228,7 @@ public class PowderGameBoard {
         String outString = "";
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
-                outString += this.board.get(posToIndex(x, y)) + " ";
+                outString += this.board.get(vecToIndex(x, y)) + " ";
             }
             outString += "\n";
         }
