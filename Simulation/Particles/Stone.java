@@ -10,8 +10,8 @@ public class Stone extends Particle {
     private static final int WATER_SWAP_CHANCE = 2;
     private static final int SAND_SWAP_CHANCE = 1000;
 
-    public Stone(int index) {
-        super(Material.STONE, index);
+    public Stone(PowderGameBoard board, int index) {
+        super(board, Material.STONE, index);
     }
 
     public boolean canSwap(Material otherMaterial) {
@@ -29,12 +29,16 @@ public class Stone extends Particle {
         }
     }
 
-    public void update(PowderGameBoard board) {
+    public void update() {
         this.flipActive();
 
-        Particle downParticle = board.getNearbyParticle(this.index, Direction.D);
+        if (this.board.getNearbyParticle(this.index, Direction.DR).equals(Material.STONE) || this.board.getNearbyParticle(this.index, Direction.L).equals(Material.STONE)) {
+            return;
+        }
+
+        Particle downParticle = this.board.getNearbyParticle(this.index, Direction.D);
         if (this.canSwap(downParticle.getMaterial())) {
-            board.swapCells(this.index, downParticle.getIndex());
+            this.board.swapCells(this.index, downParticle.getIndex());
             return;
         }
     }

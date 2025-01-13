@@ -17,10 +17,12 @@ import Simulation.PowderGameBoard;
 
 public class Particle {
     protected Material material;
+    protected PowderGameBoard board;
     protected int index;
     protected boolean active = false;
 
-    public Particle(Material material, int index) {
+    public Particle(PowderGameBoard board, Material material, int index) {
+        this.board = board;
         this.material = material;
         this.index = index;
     }
@@ -51,7 +53,7 @@ public class Particle {
         this.setActive(!this.active);
     }
 
-    public void update(PowderGameBoard board) { // we overload this to implement the per tick updates
+    public void update() { // we overload this to implement the per tick updates
         return;
     }
 

@@ -22,7 +22,7 @@ public class PowderGameBoard {
         this.height = height;
         this.board = new ArrayList<Particle>();
         for (int i = 0; i < width*height; i++) {
-            this.board.add(new Empty(i));
+            this.board.add(new Empty(this, i));
         }
         this.createBarrier();
     }
@@ -68,18 +68,18 @@ public class PowderGameBoard {
     }
 
     public void wipe() {
-        this.board.replaceAll(element -> (element.equals(Material.BARRIER)) ? element : new Empty(element.getIndex())); // clear non-BARRIERs from board
+        this.board.replaceAll(element -> (element.equals(Material.BARRIER)) ? element : new Empty(this, element.getIndex())); // clear non-BARRIERs from board
     }
 
     public void createBarrier() {
-        this.board.replaceAll(element -> (element.equals(Material.BARRIER)) ? new Empty(element.getIndex()) : element); // clear BARRIERs from board
+        this.board.replaceAll(element -> (element.equals(Material.BARRIER)) ? new Empty(this, element.getIndex()) : element); // clear BARRIERs from board
         for (int i = 0; i < this.width; i++) { // Floor and ceiling
-            this.setCell(new Barrier(i));
-            this.setCell(new Barrier((this.height - 1) * this.width + i));
+            this.setCell(new Barrier(this, i));
+            this.setCell(new Barrier(this, (this.height - 1) * this.width + i));
         }
         for (int j = 1; j < this.height - 1; j++) { // Sides
-            this.setCell(new Barrier(this.width * j));
-            this.setCell(new Barrier(this.width * j + this.width - 1));
+            this.setCell(new Barrier(this, this.width * j));
+            this.setCell(new Barrier(this, this.width * j + this.width - 1));
         }
     }
 
@@ -89,7 +89,7 @@ public class PowderGameBoard {
         if (difference > 0) { // if widening the board
             for (int i = 0; i < this.height; i++) {
                 for (int j = 0; j < difference; j++) {
-                    this.board.add(i * this.width + this.width + i * difference + j, new Empty(i * this.width + this.width + i * difference + j));
+                    this.board.add(i * this.width + this.width + i * difference + j, new Empty(this, i * this.width + this.width + i * difference + j));
                 }
             } 
         } else if (difference < 0) { // if shrinking the board
@@ -107,7 +107,7 @@ public class PowderGameBoard {
         int difference = (newHeight - this.height) * this.width;
         if (difference > 0) { // if lengthening the board
             for (int i = 0; i < difference; i++) {
-                this.board.add(new Empty(this.board.size() + 1));
+                this.board.add(new Empty(this, this.board.size() + 1));
             }
         } else if (difference < 0) { // if shortening the board
             for (int i = 0; i > difference; i--) {
@@ -190,7 +190,7 @@ public class PowderGameBoard {
             for (int j = vec[1] - this.placingRadius; j < vec[1] + this.placingRadius + 1; j++) {
                 try {
                     if ((this.getCell(this.vecToIndex(i, j)).equals(Material.EMPTY) || mouseHandler.getChosenMaterial().equals(Material.EMPTY)) && !this.getCell(this.vecToIndex(i, j)).equals(Material.BARRIER)) {
-                        this.setCell(mouseHandler.getChosenMaterial().toParticle(this.vecToIndex(i, j)));
+                        this.setCell(mouseHandler.getChosenMaterial().toParticle(this, this.vecToIndex(i, j)));
                     }
                 } catch (Exception e) {
                     System.out.println(e);
@@ -205,7 +205,7 @@ public class PowderGameBoard {
         Collections.shuffle(copyBoard); // update the array in a random order
         for (Particle particle : copyBoard) {
             if (particle.isActive()) {
-                particle.update(this);
+                particle.update();
             }
         }
     }

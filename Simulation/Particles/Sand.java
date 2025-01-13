@@ -9,8 +9,8 @@ public class Sand extends Particle {
     private static Random rng = new Random();
     private static final int WATER_SWAP_CHANCE = 20;
 
-    public Sand(int index) {
-        super(Material.SAND, index);
+    public Sand(PowderGameBoard board, int index) {
+        super(board, Material.SAND, index);
     }
 
     public boolean canSwap(Material otherMaterial) {
@@ -26,26 +26,26 @@ public class Sand extends Particle {
         }
     }
 
-    public void update(PowderGameBoard board) {
+    public void update() {
         this.flipActive();
 
-        Particle downParticle = board.getCell(board.applyDirToIndex(this.index, Direction.D)); 
+        Particle downParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D)); 
         if (this.canSwap(downParticle.getMaterial())) {
-            board.swapCells(this.index, downParticle.getIndex());
+            this.board.swapCells(this.index, downParticle.getIndex());
             return;
         }
 
-        Particle downLeftParticle = board.getCell(board.applyDirToIndex(this.index, Direction.DL));
-        Particle downRightParticle = board.getCell(board.applyDirToIndex(this.index, Direction.DR));
+        Particle downLeftParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.DL));
+        Particle downRightParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.DR));
         if (this.canSwap(downLeftParticle.getMaterial())) {
             if (this.canSwap(downRightParticle.getMaterial()) && rng.nextInt(2)==0) {
-                board.swapCells(this.index, downRightParticle.getIndex());
+                this.board.swapCells(this.index, downRightParticle.getIndex());
                 return;
             }
-            board.swapCells(this.index, downLeftParticle.getIndex());
+            this.board.swapCells(this.index, downLeftParticle.getIndex());
             return;
         } else if (this.canSwap(downRightParticle.getMaterial())) {
-            board.swapCells(this.index, downRightParticle.getIndex());
+            this.board.swapCells(this.index, downRightParticle.getIndex());
             return;
         }
     }

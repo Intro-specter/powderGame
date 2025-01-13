@@ -27,3 +27,5 @@ Tastatur:
 - 3: Water
 - 4: Cloud
 - 5: Stone
+- 6: Ice
+- 7: Lava

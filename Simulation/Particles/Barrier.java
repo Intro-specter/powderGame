@@ -1,8 +1,9 @@
 package Simulation.Particles;
 import Simulation.Material;
+import Simulation.PowderGameBoard;
 
 public class Barrier extends Particle {
-    public Barrier(int index) {
-        super(Material.BARRIER, index);
+    public Barrier(PowderGameBoard board, int index) {
+        super(board, Material.BARRIER, index);
     }
 }

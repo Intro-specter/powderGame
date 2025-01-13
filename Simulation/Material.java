@@ -51,24 +51,24 @@ public enum Material {
         }
     }
 
-    public Particle toParticle(int index) throws Exception {
+    public Particle toParticle(PowderGameBoard board, int index) throws Exception {
         switch (this) {
             case EMPTY:
-                return new Empty(index);
+                return new Empty(board, index);
             case BARRIER:
-                return new Barrier(index);
+                return new Barrier(board, index);
             case SAND:
-                return new Sand(index);
+                return new Sand(board, index);
             case WATER:
-                return new Water(index);
+                return new Water(board, index);
             case CLOUD:
-                return new Cloud(index);
+                return new Cloud(board, index);
             case STONE:
-                return new Stone(index);
+                return new Stone(board, index);
             case ICE:
-                return new Ice(index);
+                return new Ice(board, index);
             case LAVA:
-                return new Lava(index);
+                return new Lava(board, index);
             default:
                 throw new Exception("Unrecognized Particle for Material: " + this.getName());
         }

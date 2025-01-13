@@ -11,8 +11,8 @@ public class Lava extends Particle {
     private static final int STONE_SWAP_CHANCE = 10;
     private static final int FREEZE_TO_STONE_CHANCE = 5;
 
-    public Lava(int index) {
-        super(Material.LAVA, index);
+    public Lava(PowderGameBoard board, int index) {
+        super(board, Material.LAVA, index);
     }
 
     public boolean canSwap(Material otherMaterial) {
@@ -30,22 +30,22 @@ public class Lava extends Particle {
         }
     }
 
-    public boolean neighbourInteraction(PowderGameBoard board) {
+    public boolean neighbourInteraction() {
         Direction[] neighbours = {Direction.U, Direction.L, Direction.R, Direction.D};
         for (Direction dir : neighbours) {    
-            Particle particle = board.getCell(board.applyDirToIndex(this.index, dir));
+            Particle particle = this.board.getCell(this.board.applyDirToIndex(this.index, dir));
 
             if (particle.getMaterial() == Material.WATER) {
-                board.setCell(new Cloud(particle.getIndex()));
+                this.board.setCell(new Cloud(this.board, particle.getIndex()));
                 if (rng.nextInt(FREEZE_TO_STONE_CHANCE) == 0) {
-                    board.setCell(new Stone(this.index));
+                    this.board.setCell(new Stone(this.board, this.index));
                     return true;
                 }
             } else if (particle.getMaterial() == Material.ICE) {
-                board.setCell(new Water(particle.getIndex()));
+                this.board.setCell(new Water(this.board, particle.getIndex()));
                 return true;
             } else if (particle.getMaterial() == Material.SAND) {
-                board.setCell(new Lava(particle.getIndex()));
+                this.board.setCell(new Lava(this.board, particle.getIndex()));
                 return true;
             }
         }
@@ -53,31 +53,31 @@ public class Lava extends Particle {
         return false;
     }
 
-    public void update(PowderGameBoard board) {
+    public void update() {
         this.flipActive();
 
-        if (neighbourInteraction(board)) {
+        if (neighbourInteraction()) {
             return;
         }
 
-        Particle downParticle = board.getCell(board.applyDirToIndex(this.index, Direction.D)); 
+        Particle downParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D)); 
         if (this.canSwap(downParticle.getMaterial())) {
-            board.swapCells(this.index, downParticle.getIndex());
+            this.board.swapCells(this.index, downParticle.getIndex());
             return;
         }
 
-        Particle leftParticle = board.getCell(board.applyDirToIndex(this.index, Direction.L));
-        Particle rightParticle = board.getCell(board.applyDirToIndex(this.index, Direction.R));
+        Particle leftParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.L));
+        Particle rightParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.R));
 
         if (this.canSwap(leftParticle.getMaterial())) {
             if (this.canSwap(rightParticle.getMaterial()) && rng.nextInt(2)==0) {
-                board.swapCells(this.index, rightParticle.getIndex());
+                this.board.swapCells(this.index, rightParticle.getIndex());
                 return;
             }
-            board.swapCells(this.index, leftParticle.getIndex());
+            this.board.swapCells(this.index, leftParticle.getIndex());
             return;
         } else if (this.canSwap(rightParticle.getMaterial())) {
-            board.swapCells(this.index, rightParticle.getIndex());
+            this.board.swapCells(this.index, rightParticle.getIndex());
             return;
         }
     }

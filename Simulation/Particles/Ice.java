@@ -11,8 +11,8 @@ public class Ice extends Particle {
     private static final int FREEZE_WATER_CHANCE = 100;
     private static final int MELT_TO_WATER_CHANCE = 100;
 
-    public Ice(int index) {
-        super(Material.ICE, index);
+    public Ice(PowderGameBoard board, int index) {
+        super(board, Material.ICE, index);
     }
 
     public boolean canSwap(Material otherMaterial) {
@@ -26,32 +26,32 @@ public class Ice extends Particle {
         }
     }
 
-    public boolean neighbourInteraction(PowderGameBoard board) {
+    public boolean neighbourInteraction() {
         Direction[] neighbours = {Direction.U, Direction.L, Direction.R, Direction.D};
         for (Direction dir : neighbours) {    
-            Particle particle = board.getCell(board.applyDirToIndex(this.index, dir));
+            Particle particle = this.board.getCell(this.board.applyDirToIndex(this.index, dir));
 
             if (particle.getMaterial() == Material.WATER && rng.nextInt(FREEZE_WATER_CHANCE) == 0) {
-                board.setCell(new Ice(particle.getIndex()));
+                this.board.setCell(new Ice(this.board, particle.getIndex()));
             }
         }
 
         return false;
     }
 
-    public void update(PowderGameBoard board) {
+    public void update() {
         this.flipActive();
 
-        if (neighbourInteraction(board)) {
+        if (neighbourInteraction()) {
             return;
         } else if (rng.nextInt(MELT_TO_WATER_CHANCE) == 0) {
-            board.setCell(new Water(this.index));
+            this.board.setCell(new Water(this.board, this.index));
             return;
         }
 
-        Particle downParticle = board.getNearbyParticle(this.index, Direction.D);
+        Particle downParticle = this.board.getNearbyParticle(this.index, Direction.D);
         if (this.canSwap(downParticle.getMaterial())) {
-            board.swapCells(this.index, downParticle.getIndex());
+            this.board.swapCells(this.index, downParticle.getIndex());
             return;
         }
     }

@@ -19,7 +19,7 @@ public class PowderTest {
 
         // Simulation
         for (int i = 0; i < 120; i++) {
-            testBoard.setCell(new Water((int)(testBoard.getWidth()*1.5)));
+            testBoard.setCell(new Water(testBoard, (int)(testBoard.getWidth()*1.5)));
             testBoard.executeTick();
             System.out.println(testBoard);
             try {
@@ -38,7 +38,7 @@ public class PowderTest {
             }
         }
         for (int i = 0; i < 45; i++) {
-            testBoard.setCell(new Sand((int)(testBoard.getWidth()*1.5)));
+            testBoard.setCell(new Sand(testBoard, (int)(testBoard.getWidth()*1.5)));
             testBoard.executeTick();
             System.out.println(testBoard);
             try {

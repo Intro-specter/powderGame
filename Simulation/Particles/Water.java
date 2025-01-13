@@ -18,8 +18,8 @@ public class Water extends Particle {
     private static final int FREEZE_TO_ICE_CHANCE = 5000;
     private static final int WEATHER_STONE_CHANCE = 1000;
 
-    public Water(int index) {
-        super(Material.WATER, index);
+    public Water(PowderGameBoard board, int index) {
+        super(board, Material.WATER, index);
     }
 
     public boolean canSwap(Material otherMaterial) {
@@ -37,47 +37,47 @@ public class Water extends Particle {
         }
     }
 
-    public void update(PowderGameBoard board) {
+    public void update() {
         this.flipActive();
 
-        Particle downParticle = board.getCell(board.applyDirToIndex(this.index, Direction.D)); 
+        Particle downParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D)); 
         if (this.canSwap(downParticle.getMaterial())) {
-            board.swapCells(this.index, downParticle.getIndex());
+            this.board.swapCells(this.index, downParticle.getIndex());
             return;
         }
 
-        Particle leftParticle = board.getCell(board.applyDirToIndex(this.index, Direction.L));
-        Particle rightParticle = board.getCell(board.applyDirToIndex(this.index, Direction.R));
+        Particle leftParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.L));
+        Particle rightParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.R));
 
         if (leftParticle.getMaterial() == Material.STONE && rng.nextInt(WEATHER_STONE_CHANCE) == 0) {
-            board.setCell(new Sand(leftParticle.getIndex()));
+            this.board.setCell(new Sand(this.board, leftParticle.getIndex()));
             return;
         }
 
         if (rightParticle.getMaterial() == Material.STONE && rng.nextInt(WEATHER_STONE_CHANCE) == 0) {
-            board.setCell(new Sand(rightParticle.getIndex()));
+            this.board.setCell(new Sand(this.board, rightParticle.getIndex()));
             return;
         }
 
-        if (board.getCell(board.applyDirToIndex(this.index, Direction.U)).getMaterial() == Material.EMPTY) {
+        if (this.board.getCell(this.board.applyDirToIndex(this.index, Direction.U)).getMaterial() == Material.EMPTY) {
             if (rng.nextInt(EVAPORATE_CHANCE) == 0) {
-                board.setCell(new Cloud(this.index));
+                this.board.setCell(new Cloud(this.board, this.index));
                 return;
             } else if (rng.nextInt(FREEZE_TO_ICE_CHANCE) == 0) {
-                board.setCell(new Ice(this.index));
+                this.board.setCell(new Ice(this.board, this.index));
                 return;
             }
         }
 
         if (this.canSwap(leftParticle.getMaterial())) {
             if (this.canSwap(rightParticle.getMaterial()) && rng.nextInt(2)==0) {
-                board.swapCells(this.index, rightParticle.getIndex());
+                this.board.swapCells(this.index, rightParticle.getIndex());
                 return;
             }
-            board.swapCells(this.index, leftParticle.getIndex());
+            this.board.swapCells(this.index, leftParticle.getIndex());
             return;
         } else if (this.canSwap(rightParticle.getMaterial())) {
-            board.swapCells(this.index, rightParticle.getIndex());
+            this.board.swapCells(this.index, rightParticle.getIndex());
             return;
         }
     }
