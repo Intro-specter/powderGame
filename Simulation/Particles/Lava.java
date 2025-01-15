@@ -5,14 +5,19 @@ import java.util.Random;
 import Simulation.Direction;
 import Simulation.Material;
 import Simulation.PowderGameBoard;
+import java.awt.Color;
 
 public class Lava extends Particle {
     private static Random rng = new Random();
+    private static final Color STD_LAVA_COLOR = new Color(255, 125, 75);
+    private static final Color ALT_LAVA_COLOR = new Color(255, 150, 100);
+    private static final int RECOLOR_CHANCE = 20;
     private static final int STONE_SWAP_CHANCE = 10;
     private static final int FREEZE_TO_STONE_CHANCE = 5;
 
     public Lava(PowderGameBoard board, int index) {
         super(board, Material.LAVA, index);
+        this.color = STD_LAVA_COLOR;
     }
 
     public boolean canSwap(Material otherMaterial) {
@@ -55,6 +60,10 @@ public class Lava extends Particle {
 
     public void update() {
         this.flipActive();
+
+        if (rng.nextInt(RECOLOR_CHANCE) == 0) {
+            this.color = Particle.shiftColorTowardsTarget((rng.nextInt(2) == 0) ? STD_LAVA_COLOR : ALT_LAVA_COLOR, Color.WHITE, board.getHeight(), this.getDepthInDirection(Direction.U));
+        }
 
         if (neighbourInteraction()) {
             return;

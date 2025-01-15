@@ -4,14 +4,18 @@ import java.util.Random;
 import Simulation.Direction;
 import Simulation.Material;
 import Simulation.PowderGameBoard;
+import java.awt.Color;
 
 public class Stone extends Particle {
     private static Random rng = new Random();
+    private static final Color STD_STONE_COLOR = new Color(150, 125, 125);
+    private static final int RECOLOR_CHANCE = 15;
     private static final int WATER_SWAP_CHANCE = 2;
     private static final int SAND_SWAP_CHANCE = 1000;
 
     public Stone(PowderGameBoard board, int index) {
         super(board, Material.STONE, index);
+        this.color = STD_STONE_COLOR;
     }
 
     public boolean canSwap(Material otherMaterial) {
@@ -31,6 +35,10 @@ public class Stone extends Particle {
 
     public void update() {
         this.flipActive();
+
+        if (rng.nextInt(RECOLOR_CHANCE) == 0) {
+            this.color = Particle.shiftColorTowardsTarget(STD_STONE_COLOR, Color.BLACK, board.getHeight(), this.getDepthInDirection(Direction.U));
+        }
 
         if (this.board.getNearbyParticle(this.index, Direction.DR).equals(Material.STONE) || this.board.getNearbyParticle(this.index, Direction.L).equals(Material.STONE)) {
             return;

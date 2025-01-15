@@ -8,18 +8,21 @@ import java.util.Random;
 import Simulation.Direction;
 import Simulation.Material;
 import Simulation.PowderGameBoard;
+import java.awt.Color;
 
 public class Water extends Particle {
     private static Random rng = new Random();
+    private static final Color STD_WATER_COLOR = new Color(100, 100, 255);
+    private static final int RECOLOR_CHANCE = 10;
     private static final int CLOUD_SWAP_CHANCE = 10;
     private static final int SAND_SWAP_CHANCE = 500;
     private static final int ICE_SWAP_CHANCE = 5;
     private static final int EVAPORATE_CHANCE = 2000;
-    private static final int FREEZE_TO_ICE_CHANCE = 5000;
     private static final int WEATHER_STONE_CHANCE = 1000;
 
     public Water(PowderGameBoard board, int index) {
         super(board, Material.WATER, index);
+        this.color = STD_WATER_COLOR;
     }
 
     public boolean canSwap(Material otherMaterial) {
@@ -39,6 +42,10 @@ public class Water extends Particle {
 
     public void update() {
         this.flipActive();
+
+        if (rng.nextInt(RECOLOR_CHANCE) == 0) {
+            this.color = Particle.shiftColorTowardsTarget(STD_WATER_COLOR, Color.BLACK, board.getHeight(), this.getDepthInDirection(Direction.U));
+        }
 
         Particle downParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D)); 
         if (this.canSwap(downParticle.getMaterial())) {
@@ -63,10 +70,10 @@ public class Water extends Particle {
             if (rng.nextInt(EVAPORATE_CHANCE) == 0) {
                 this.board.setCell(new Cloud(this.board, this.index));
                 return;
-            } else if (rng.nextInt(FREEZE_TO_ICE_CHANCE) == 0) {
+            } /* else if (rng.nextInt(FREEZE_TO_ICE_CHANCE) == 0) {
                 this.board.setCell(new Ice(this.board, this.index));
                 return;
-            }
+            } */
         }
 
         if (this.canSwap(leftParticle.getMaterial())) {

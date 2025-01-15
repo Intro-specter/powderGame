@@ -5,14 +5,18 @@ import java.util.Random;
 import Simulation.Direction;
 import Simulation.Material;
 import Simulation.PowderGameBoard;
+import java.awt.Color;
 
 public class Ice extends Particle {
     private static Random rng = new Random();
+    private static final Color STD_ICE_COLOR = new Color(225, 225, 255);
+    private static final int RECOLOR_CHANCE = 25;
     private static final int FREEZE_WATER_CHANCE = 100;
     private static final int MELT_TO_WATER_CHANCE = 100;
 
     public Ice(PowderGameBoard board, int index) {
         super(board, Material.ICE, index);
+        this.color = STD_ICE_COLOR;
     }
 
     public boolean canSwap(Material otherMaterial) {
@@ -41,6 +45,10 @@ public class Ice extends Particle {
 
     public void update() {
         this.flipActive();
+
+        if (rng.nextInt(RECOLOR_CHANCE) == 0) {
+            this.color = Particle.shiftColorTowardsTarget(STD_ICE_COLOR, Color.BLUE, board.getHeight(), this.getDepthInDirection(Direction.U));
+        }
 
         if (neighbourInteraction()) {
             return;

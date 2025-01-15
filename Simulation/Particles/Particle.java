@@ -5,13 +5,12 @@ package Simulation.Particles;
  * classes or attributes in to differentiate powders, liquids and gases and then define behaviour according
  * to traits like density, velocity, temperature, etc. though this requires a complete overhaul of the
  * current particle simulation.
- * 
- * TODO: make board a static attribute instead of a parameter
  */
 
 import java.awt.Color;
 import java.lang.reflect.Field;
 
+import Simulation.Direction;
 import Simulation.Material;
 import Simulation.PowderGameBoard;
 
@@ -20,6 +19,7 @@ public class Particle {
     protected PowderGameBoard board;
     protected int index;
     protected boolean active = false;
+    protected Color color = Color.BLACK;
 
     public Particle(PowderGameBoard board, Material material, int index) {
         this.board = board;
@@ -53,13 +53,35 @@ public class Particle {
         this.setActive(!this.active);
     }
 
+    public int getDepthInDirection(Direction dir) {
+        int count = 0;
+        int searchIndex = this.index;
+        do {
+            count++;
+            searchIndex += board.dirToIndex(dir);
+        } while (board.getCell(searchIndex).equals(this) && !board.getCell(searchIndex).equals(Material.BARRIER));
+        return count;
+    }
+
+    public static Color addToColor(Color color, int add) {
+        return new Color((color.getRed() > Math.abs(add)) ? (color.getRed() + add) % 256 : color.getRed(), 
+            (color.getGreen() > Math.abs(add)) ? (color.getGreen() + add) % 256 : color.getGreen(), 
+            (color.getBlue() > Math.abs(add)) ? (color.getBlue() + add) % 256 : color.getBlue());
+    }
+
+    public static Color shiftColorTowardsTarget(Color color, Color targetColor, int max, int progress) {
+        return new Color(color.getRed()+(targetColor.getRed()-color.getRed())*progress/max,
+        color.getGreen()+(targetColor.getGreen()-color.getGreen())*progress/max,
+        color.getBlue()+(targetColor.getBlue()-color.getBlue())*progress/max);
+    }
+
     public void update() { // we overload this to implement the per tick updates
         return;
     }
 
     public boolean hasAttribute(String attributeName) { // use this to check for possible generic actions in update
         Class<?> type = this.getClass();
-        for (Field field : type.getFields()) {
+        for (Field field : type.getDeclaredFields()) {
             if (field.getName().equals(attributeName)) {
                 return true;
             }
@@ -76,7 +98,7 @@ public class Particle {
     }
 
     public Color getColor() {
-        return this.material.toColor();
+        return this.color;
     }
 
     public String getName() {

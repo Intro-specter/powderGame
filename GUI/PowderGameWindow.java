@@ -151,7 +151,7 @@ public class PowderGameWindow {
                 }
             }
 
-            dataLabel.setText("Selected Material: " + mouseHandler.getChosenMaterial().getName() + ", Placing Radius: " + board.getPlacingRadius() + ", Paused: " + pixelPainter.isPaused() + ", Sim Speed: " + pixelPainter.getMSPerFrame() + ", Board Dimensions: (" + board.getWidth() + "," + board.getHeight() + "), Cell Scale: " + pixelPainter.getScale());
+            dataLabel.setText("Selected Material: " + mouseHandler.getChosenMaterial().getName() + ", Placing Radius: " + board.getPlacingRadius() + ", Paused: " + pixelPainter.isPaused() + ", ms/tick: " + pixelPainter.getMSPerFrame() + ", Board Dimensions: (" + board.getWidth() + "," + board.getHeight() + "), Cell Scale: " + pixelPainter.getScale());
 
             frame.repaint();
         }
