@@ -20,6 +20,7 @@ public class Particle {
     protected int index;
     protected boolean active = false;
     protected Color color = Color.BLACK;
+    protected int occlusionValue = 0;
 
     public Particle(PowderGameBoard board, Material material, int index) {
         this.board = board;
@@ -41,6 +42,10 @@ public class Particle {
         this.index = index;
     }
 
+    public int getOcclusionValue() {
+        return this.occlusionValue;
+    }
+
     public boolean isActive() {
         return this.active;
     }
@@ -51,6 +56,14 @@ public class Particle {
 
     public void flipActive() {
         this.setActive(!this.active);
+    }
+
+    protected void stdOcclusion(int totalOcclusionValue, Color start, Color end) {
+        this.color = Particle.shiftColorTowardsTarget(start, end, this.board.getHeight()*this.board.MAX_OCCLUSION, totalOcclusionValue);
+    }
+
+    public void applyOcclusion(int totalOcclusionValue) {
+        this.stdOcclusion(totalOcclusionValue, Color.WHITE, Color.BLACK);
     }
 
     public int getDepthInDirection(Direction dir) {
@@ -73,7 +86,7 @@ public class Particle {
         return new Color(color.getRed()+(targetColor.getRed()-color.getRed())*progress/max,
         color.getGreen()+(targetColor.getGreen()-color.getGreen())*progress/max,
         color.getBlue()+(targetColor.getBlue()-color.getBlue())*progress/max);
-    }
+    } 
 
     public void update() { // we overload this to implement the per tick updates
         return;
@@ -99,6 +112,10 @@ public class Particle {
 
     public Color getColor() {
         return this.color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public String getName() {

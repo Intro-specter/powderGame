@@ -22,6 +22,9 @@ Tastatur:
 - O: Simulation verschnellern
 - P: Simulation verlangsamen
 - SPACE: Simulation pausieren
+- D: Text Zeigen
+- F: Texthintergrund Zeigen
+- G: Zusätzliche Grafikprozesse ein-/ausschalten
 - 1: Empty
 - 2: Sand
 - 3: Water

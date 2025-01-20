@@ -10,13 +10,13 @@ import java.awt.Color;
 public class Ice extends Particle {
     private static Random rng = new Random();
     private static final Color STD_ICE_COLOR = new Color(225, 225, 255);
-    private static final int RECOLOR_CHANCE = 25;
-    private static final int FREEZE_WATER_CHANCE = 100;
-    private static final int MELT_TO_WATER_CHANCE = 100;
+    private static final int FREEZE_WATER_CHANCE = 50;
+    private static final int MELT_TO_WATER_CHANCE = 40;
 
     public Ice(PowderGameBoard board, int index) {
         super(board, Material.ICE, index);
         this.color = STD_ICE_COLOR;
+        this.occlusionValue = 5;
     }
 
     public boolean canSwap(Material otherMaterial) {
@@ -28,6 +28,13 @@ public class Ice extends Particle {
             default:
                 return false;
         }
+    }
+
+    public boolean isEncased() {
+        return this.board.getCell(this.board.applyDirToIndex(this.index, Direction.U)).equals(this) 
+            && this.board.getCell(this.board.applyDirToIndex(this.index, Direction.L)).equals(this) 
+            && this.board.getCell(this.board.applyDirToIndex(this.index, Direction.R)).equals(this) 
+            && this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D)).equals(this);
     }
 
     public boolean neighbourInteraction() {
@@ -43,16 +50,16 @@ public class Ice extends Particle {
         return false;
     }
 
+    public void applyOcclusion(int totalOcclusionValue) {
+        this.stdOcclusion(totalOcclusionValue, STD_ICE_COLOR, Color.BLUE);
+    }
+
     public void update() {
         this.flipActive();
 
-        if (rng.nextInt(RECOLOR_CHANCE) == 0) {
-            this.color = Particle.shiftColorTowardsTarget(STD_ICE_COLOR, Color.BLUE, board.getHeight(), this.getDepthInDirection(Direction.U));
-        }
-
         if (neighbourInteraction()) {
             return;
-        } else if (rng.nextInt(MELT_TO_WATER_CHANCE) == 0) {
+        } else if (rng.nextInt(MELT_TO_WATER_CHANCE) == 0 && !this.isEncased()) {
             this.board.setCell(new Water(this.board, this.index));
             return;
         }

@@ -20,7 +20,7 @@ public class PowderTest {
         // Simulation
         for (int i = 0; i < 120; i++) {
             testBoard.setCell(new Water(testBoard, (int)(testBoard.getWidth()*1.5)));
-            testBoard.executeTick();
+            testBoard.stepSim();
             System.out.println(testBoard);
             try {
                 TimeUnit.MILLISECONDS.sleep(50);
@@ -29,7 +29,7 @@ public class PowderTest {
             }
         }
         for (int i = 0; i < 30; i++) {
-            testBoard.executeTick();
+            testBoard.stepSim();
             System.out.println(testBoard);
             try {
                 TimeUnit.MILLISECONDS.sleep(50);
@@ -39,7 +39,7 @@ public class PowderTest {
         }
         for (int i = 0; i < 45; i++) {
             testBoard.setCell(new Sand(testBoard, (int)(testBoard.getWidth()*1.5)));
-            testBoard.executeTick();
+            testBoard.stepSim();
             System.out.println(testBoard);
             try {
                 TimeUnit.MILLISECONDS.sleep(50);
@@ -48,7 +48,7 @@ public class PowderTest {
             }
         }
         for (int i = 0; i < 105; i++) {
-            testBoard.executeTick();
+            testBoard.stepSim();
             System.out.println(testBoard);
             try {
                 TimeUnit.MILLISECONDS.sleep(50);
@@ -59,7 +59,7 @@ public class PowderTest {
         System.out.println(testBoard);
         testBoard.setWidth(25);
         for (int i = 0; i < 105; i++) {
-            testBoard.executeTick();
+            testBoard.stepSim();
             System.out.println(testBoard);
             try {
                 TimeUnit.MILLISECONDS.sleep(50);

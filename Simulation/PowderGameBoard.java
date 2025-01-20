@@ -12,6 +12,7 @@ import Simulation.Particles.Particle;
  */
 
 public class PowderGameBoard {
+    public final int MAX_OCCLUSION = 10;
     private ArrayList<Particle> board;
     private int width;
     private int height;
@@ -218,10 +219,31 @@ public class PowderGameBoard {
         }
     }
 
-    public void executeTick() {
+    public void downDepthFilter() {
+        for (int i = 0; i < this.width; i++) {
+            int cumulative_occlusion = 0;
+            for (int j = 0; j < this.height; j++) {
+                Particle toCheck = this.getCell(this.vecToIndex(i, j));
+                cumulative_occlusion += toCheck.getOcclusionValue();
+                if (toCheck.getMaterial().isIn(Material.DOWN_DEPTH_RECOLORABLE)) {
+                    toCheck.applyOcclusion(cumulative_occlusion);
+                }
+                
+            }
+        }
+    }
+
+    public void stepSim() {
         this.readyBoard();
         this.update();
     }
+
+    public void stepFancy() { 
+        this.stepSim();
+        this.downDepthFilter();
+    }
+    // downDepthFilter has crazy overhead and doesn't really need calling every tick to look nice, 
+    // so we can separate it to be called every few frames.
 
     @Override
     public String toString() {

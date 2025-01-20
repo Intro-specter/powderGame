@@ -12,6 +12,17 @@ public enum Material {
     ICE,
     LAVA;
 
+    public static final Material[] DOWN_DEPTH_RECOLORABLE = {SAND, WATER, CLOUD, STONE, ICE, LAVA};
+
+    public boolean isIn(Material[] materialArray) {
+        for (Material check : materialArray) {
+            if (this == check) {return true;}
+        }
+        return false;
+    }
+
+    public boolean isSimMaterial() {return !(this == EMPTY || this == BARRIER);}
+
     public Particle toParticle(PowderGameBoard board, int index) throws Exception {
         switch (this) {
             case EMPTY:
