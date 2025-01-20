@@ -2,17 +2,8 @@ package GUI;
 
 /*
  * TODO: Comment things fr
- *
- * The main function here implements all the graphics and game logic at once, 
- * which is tough to debug.
- * TODO: Compartmentalize main fn
- * TODO: Separate Graphics, Input, and Game Logic into Threads
  * 
  * Known issues at runtime:
- * - Index out of range exception when PowderGameBoard.attemptPlace() would 
- *   attempt to place outside bounds (top or bottom of screen)
- *     - Additional side effect that causes wrap-around 
- *       on the sides for placing (because the game is stored in a 1D-array)
  * - Flickering edges when paused, presumably because PowderGameBoard.createBarrier() 
  *   is constantly getting called for some reason.
  * 
@@ -44,7 +35,7 @@ public class PowderGameWindow {
         final int X_OFFSET = -8; // Offset mouse input so it's on the tip of my cursor
         final int Y_OFFSET = -30; // These can be wrong for other cursor types
         final int MAX_MILLISECONDS_PER_FRAME = 257; // maximum wait time between loops
-        final int INIT_MILLISECONDS_PER_FRAME = 8; // initial wait time
+        final int INIT_MILLISECONDS_PER_FRAME = 2; // initial wait time
         final boolean START_PAUSED = false; // whether or not to start the simulation paused
         final int MAX_SCALE = 20; // maximum pixels per particle
         final int MIN_SCALE = 1; // minimum pixels per particle
@@ -185,10 +176,12 @@ public class PowderGameWindow {
                     count = 0;
                 }
                 
-                try {
-                    TimeUnit.MILLISECONDS.sleep(pixelPainter.getMSPerFrame());
-                } catch(Exception e) {
-                    System.out.println(e);
+                if (pixelPainter.getMSPerFrame() > 0) {
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(pixelPainter.getMSPerFrame());
+                    } catch(Exception e) {
+                        System.out.println(e);
+                    }
                 }
             }
 

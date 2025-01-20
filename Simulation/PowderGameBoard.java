@@ -7,10 +7,6 @@ import Simulation.Particles.Barrier;
 import Simulation.Particles.Empty;
 import Simulation.Particles.Particle;
 
-/*
- * TODO: change update order or something so it's not left to right
- */
-
 public class PowderGameBoard {
     public final int MAX_OCCLUSION = 10;
     private ArrayList<Particle> board;
@@ -187,8 +183,10 @@ public class PowderGameBoard {
 
     public void attemptPlace(int index, MouseHandler mouseHandler) {
         int[] vec = indexToVec(index);
-        for (int i = vec[0] - this.placingRadius; i < vec[0] + this.placingRadius + 1; i++) {
-            for (int j = vec[1] - this.placingRadius; j < vec[1] + this.placingRadius + 1; j++) {
+        int xEnd = (vec[0] < this.width - this.placingRadius) ? vec[0] + this.placingRadius + 1 : this.width;
+        int yEnd = (vec[1] < this.height - this.placingRadius) ? vec[1] + this.placingRadius + 1 : this.height;
+        for (int i = (vec[0] > this.placingRadius) ? vec[0] - this.placingRadius : 0; i < xEnd; i++) {
+            for (int j = (vec[1] > this.placingRadius) ? vec[1] - this.placingRadius : 0; j < yEnd; j++) {
                 try {
                     if ((this.getCell(this.vecToIndex(i, j)).equals(Material.EMPTY) || mouseHandler.getChosenMaterial().equals(Material.EMPTY)) && !this.getCell(this.vecToIndex(i, j)).equals(Material.BARRIER)) {
                         this.setCell(mouseHandler.getChosenMaterial().toParticle(this, this.vecToIndex(i, j)));

@@ -1,11 +1,4 @@
 package Simulation.Particles;
-/*
- * Currently, for things like the canSwap() fn of subclasses, I use switch cases for unique behaviour
- * respective to each other material, which creates exponential complexity. I might try putting some intermediate
- * classes or attributes in to differentiate powders, liquids and gases and then define behaviour according
- * to traits like density, velocity, temperature, etc. though this requires a complete overhaul of the
- * current particle simulation.
- */
 
 import java.awt.Color;
 import java.lang.reflect.Field;
