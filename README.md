@@ -32,3 +32,5 @@ Tastatur:
 - 5: Stone
 - 6: Ice
 - 7: Lava
+
+Dieses Projekt wurde von @Intro-specter (CB) gebaut.
