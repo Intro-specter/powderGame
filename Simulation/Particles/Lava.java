@@ -36,8 +36,8 @@ public class Lava extends Particle {
     }
 
     public boolean neighbourInteraction() {
-        Direction[] neighbours = {Direction.U, Direction.L, Direction.R, Direction.D};
-        for (Direction dir : neighbours) {    
+        Direction[] neighbours = { Direction.U, Direction.L, Direction.R, Direction.D };
+        for (Direction dir : neighbours) {
             Particle particle = this.board.getCell(this.board.applyDirToIndex(this.index, dir));
 
             if (particle.getMaterial() == Material.WATER) {
@@ -59,7 +59,8 @@ public class Lava extends Particle {
     }
 
     public void applyOcclusion(int totalOcclusionValue) {
-        this.stdOcclusion(totalOcclusionValue, this.color = (rng.nextInt(2) == 0) ? STD_LAVA_COLOR : ALT_LAVA_COLOR, Color.WHITE);
+        this.stdOcclusion(totalOcclusionValue, this.color = (rng.nextInt(2) == 0) ? STD_LAVA_COLOR : ALT_LAVA_COLOR,
+                Color.WHITE);
     }
 
     public void update() {
@@ -69,7 +70,7 @@ public class Lava extends Particle {
             return;
         }
 
-        Particle downParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D)); 
+        Particle downParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D));
         if (this.canSwap(downParticle.getMaterial())) {
             this.board.swapCells(this.index, downParticle.getIndex());
             return;
@@ -79,7 +80,7 @@ public class Lava extends Particle {
         Particle rightParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.R));
 
         if (this.canSwap(leftParticle.getMaterial())) {
-            if (this.canSwap(rightParticle.getMaterial()) && rng.nextInt(2)==0) {
+            if (this.canSwap(rightParticle.getMaterial()) && rng.nextInt(2) == 0) {
                 this.board.swapCells(this.index, rightParticle.getIndex());
                 return;
             }

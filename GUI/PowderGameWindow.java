@@ -49,6 +49,7 @@ public class PowderGameWindow {
                 mouseHandler.setX(e.getX());
                 mouseHandler.setY(e.getY());
             }
+
             public void mouseDragged(MouseEvent e) {
                 mouseHandler.setX(e.getX());
                 mouseHandler.setY(e.getY());
@@ -58,60 +59,63 @@ public class PowderGameWindow {
 
         frame.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_R){ // wipe board with R
+                if (e.getKeyCode() == KeyEvent.VK_R) { // wipe board with R
                     board.wipe();
                 }
-                if(e.getKeyCode() == KeyEvent.VK_ESCAPE){ // close the program with ESC
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) { // close the program with ESC
                     frame.setVisible(false);
                     frame.dispose();
                     System.exit(0);
                 }
-                if(e.getKeyCode() == KeyEvent.VK_SPACE){ // pause updates with SPACE
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) { // pause updates with SPACE
                     pixelPainter.flipPaused();
                 }
-                if(e.getKeyCode() == KeyEvent.VK_D){ // toggle text
+                if (e.getKeyCode() == KeyEvent.VK_D) { // toggle text
                     pixelPainter.flipShowingText();
                 }
-                if(e.getKeyCode() == KeyEvent.VK_F){ // toggle text background
+                if (e.getKeyCode() == KeyEvent.VK_F) { // toggle text background
                     pixelPainter.flipShowingTextBackground();
                 }
-                if(e.getKeyCode() == KeyEvent.VK_G){ // toggle debug graphics
+                if (e.getKeyCode() == KeyEvent.VK_G) { // toggle debug graphics
                     pixelPainter.flipFancy();
                 }
-                if (e.getKeyCode() == KeyEvent.VK_O && pixelPainter.getMSPerFrame() > 1){
-                    pixelPainter.setMSPerFrame(pixelPainter.getMSPerFrame()/2);
-                } else if (e.getKeyCode() == KeyEvent.VK_P && pixelPainter.getMSPerFrame() == 0){
+                if (e.getKeyCode() == KeyEvent.VK_O && pixelPainter.getMSPerFrame() > 1) {
+                    pixelPainter.setMSPerFrame(pixelPainter.getMSPerFrame() / 2);
+                } else if (e.getKeyCode() == KeyEvent.VK_P && pixelPainter.getMSPerFrame() == 0) {
                     pixelPainter.setMSPerFrame(1);
-                } else if (e.getKeyCode() == KeyEvent.VK_P && pixelPainter.getMSPerFrame() < MAX_MILLISECONDS_PER_FRAME){
-                    pixelPainter.setMSPerFrame(pixelPainter.getMSPerFrame()*2);
-                } else if (e.getKeyCode() == KeyEvent.VK_O && pixelPainter.getMSPerFrame() == 1){
+                } else if (e.getKeyCode() == KeyEvent.VK_P
+                        && pixelPainter.getMSPerFrame() < MAX_MILLISECONDS_PER_FRAME) {
+                    pixelPainter.setMSPerFrame(pixelPainter.getMSPerFrame() * 2);
+                } else if (e.getKeyCode() == KeyEvent.VK_O && pixelPainter.getMSPerFrame() == 1) {
                     pixelPainter.setMSPerFrame(0);
                 }
-                if(e.getKeyCode() == KeyEvent.VK_Q){ // decrease placing radius with Q
-                    board.setPlacingRadius((board.getPlacingRadius() > 0) ? board.getPlacingRadius() - 1 : board.getPlacingRadius());
-                } else if(e.getKeyCode() == KeyEvent.VK_E){ // increase placing radius with E
-                    board.setPlacingRadius((board.getPlacingRadius() < 10) ? board.getPlacingRadius() + 1 : board.getPlacingRadius());
+                if (e.getKeyCode() == KeyEvent.VK_Q) { // decrease placing radius with Q
+                    board.setPlacingRadius(
+                            (board.getPlacingRadius() > 0) ? board.getPlacingRadius() - 1 : board.getPlacingRadius());
+                } else if (e.getKeyCode() == KeyEvent.VK_E) { // increase placing radius with E
+                    board.setPlacingRadius(
+                            (board.getPlacingRadius() < 10) ? board.getPlacingRadius() + 1 : board.getPlacingRadius());
                 }
 
-                if(e.getKeyCode() == KeyEvent.VK_1){ 
+                if (e.getKeyCode() == KeyEvent.VK_1) {
                     mouseHandler.setChosenMaterial(Material.EMPTY);
-                } else if(e.getKeyCode() == KeyEvent.VK_2){ 
+                } else if (e.getKeyCode() == KeyEvent.VK_2) {
                     mouseHandler.setChosenMaterial(Material.SAND);
-                } else if(e.getKeyCode() == KeyEvent.VK_3){ 
+                } else if (e.getKeyCode() == KeyEvent.VK_3) {
                     mouseHandler.setChosenMaterial(Material.WATER);
-                } else if(e.getKeyCode() == KeyEvent.VK_4){ 
+                } else if (e.getKeyCode() == KeyEvent.VK_4) {
                     mouseHandler.setChosenMaterial(Material.CLOUD);
-                } else if(e.getKeyCode() == KeyEvent.VK_5){ 
+                } else if (e.getKeyCode() == KeyEvent.VK_5) {
                     mouseHandler.setChosenMaterial(Material.STONE);
-                } else if(e.getKeyCode() == KeyEvent.VK_6){ 
+                } else if (e.getKeyCode() == KeyEvent.VK_6) {
                     mouseHandler.setChosenMaterial(Material.ICE);
-                } else if(e.getKeyCode() == KeyEvent.VK_7){ 
+                } else if (e.getKeyCode() == KeyEvent.VK_7) {
                     mouseHandler.setChosenMaterial(Material.LAVA);
                 }
             }
         });
 
-        frame.setSize(INIT_WIDTH*INIT_SCALE, INIT_HEIGHT*INIT_SCALE);
+        frame.setSize(INIT_WIDTH * INIT_SCALE, INIT_HEIGHT * INIT_SCALE);
         frame.setMinimumSize(new Dimension(400, 100));
 
         frame.add(pixelPainter);
@@ -143,27 +147,34 @@ public class PowderGameWindow {
         while (true) {
             Instant start = Instant.now();
 
-            if (Math.abs((frame.getWidth() + FRAME_WIDTH_OFFSET - leftInset - rightInset) - (board.getWidth() * pixelPainter.getScale())) > 0) {
-                board.setWidth((frame.getWidth() + FRAME_WIDTH_OFFSET - leftInset - rightInset) / pixelPainter.getScale());
+            if (Math.abs((frame.getWidth() + FRAME_WIDTH_OFFSET - leftInset - rightInset)
+                    - (board.getWidth() * pixelPainter.getScale())) > 0) {
+                board.setWidth(
+                        (frame.getWidth() + FRAME_WIDTH_OFFSET - leftInset - rightInset) / pixelPainter.getScale());
             }
-            if (Math.abs((frame.getHeight() + FRAME_HEIGHT_OFFSET - topInset - bottomInset) - (board.getHeight() * pixelPainter.getScale())) > 0) {
-                board.setHeight((frame.getHeight() + FRAME_HEIGHT_OFFSET - topInset - bottomInset) / pixelPainter.getScale());
+            if (Math.abs((frame.getHeight() + FRAME_HEIGHT_OFFSET - topInset - bottomInset)
+                    - (board.getHeight() * pixelPainter.getScale())) > 0) {
+                board.setHeight(
+                        (frame.getHeight() + FRAME_HEIGHT_OFFSET - topInset - bottomInset) / pixelPainter.getScale());
             }
 
             // change scale with scrolling
             switch (wheelListener.getMoveDir()) {
-                case -1: //UP
-                    pixelPainter.setScale((pixelPainter.getScale() < MAX_SCALE) ? pixelPainter.getScale() + 1 : pixelPainter.getScale());
+                case -1: // UP
+                    pixelPainter.setScale((pixelPainter.getScale() < MAX_SCALE) ? pixelPainter.getScale() + 1
+                            : pixelPainter.getScale());
                     wheelListener.setMoveDir(0);
                     break;
-                case 1: //DOWN
-                    pixelPainter.setScale((pixelPainter.getScale() > MIN_SCALE) ? pixelPainter.getScale() - 1 : pixelPainter.getScale());
+                case 1: // DOWN
+                    pixelPainter.setScale((pixelPainter.getScale() > MIN_SCALE) ? pixelPainter.getScale() - 1
+                            : pixelPainter.getScale());
                     wheelListener.setMoveDir(0);
-                    break;   
+                    break;
             }
 
             if (mouseHandler.isActive()) {
-                board.attemptPlace(board.vecToIndex((mouseHandler.getX() + X_OFFSET)/pixelPainter.getScale(), (mouseHandler.getY() + Y_OFFSET)/pixelPainter.getScale()), mouseHandler);
+                board.attemptPlace(board.vecToIndex((mouseHandler.getX() + X_OFFSET) / pixelPainter.getScale(),
+                        (mouseHandler.getY() + Y_OFFSET) / pixelPainter.getScale()), mouseHandler);
             }
 
             if (!pixelPainter.isPaused()) {
@@ -175,24 +186,24 @@ public class PowderGameWindow {
                     board.stepFancy();
                     count = 0;
                 }
-                
+
                 if (pixelPainter.getMSPerFrame() > 0) {
                     try {
                         TimeUnit.MILLISECONDS.sleep(pixelPainter.getMSPerFrame());
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         System.out.println(e);
                     }
                 }
             }
 
             if (pixelPainter.isShowingText()) {
-                dataLabel.setText("Selected Material: " + mouseHandler.getChosenMaterial().getName() + 
-                    ", Placing Radius: " + board.getPlacingRadius() + 
-                    ", Paused: " + pixelPainter.isPaused() + 
-                    ", ms/tick: " + pixelPainter.getMSPerFrame() + 
-                    ", Board Dimensions: (" + board.getWidth() + "," + board.getHeight() + 
-                    "), Cell Scale: " + pixelPainter.getScale());
-                
+                dataLabel.setText("Selected Material: " + mouseHandler.getChosenMaterial().getName() +
+                        ", Placing Radius: " + board.getPlacingRadius() +
+                        ", Paused: " + pixelPainter.isPaused() +
+                        ", ms/tick: " + pixelPainter.getMSPerFrame() +
+                        ", Board Dimensions: (" + board.getWidth() + "," + board.getHeight() +
+                        "), Cell Scale: " + pixelPainter.getScale());
+
                 if (!dataLabel.isVisible()) {
                     dataLabel.setVisible(true);
                     debugLabel.setVisible(true);
@@ -209,13 +220,14 @@ public class PowderGameWindow {
                 dataLabel.setVisible(false);
                 debugLabel.setVisible(false);
             }
-            
+
             frame.repaint();
 
             if (pixelPainter.isShowingText()) {
                 Instant end = Instant.now();
                 Duration deltaTime = Duration.between(start, end);
-                debugLabel.setText("Fancy graphics: " + ((pixelPainter.isFancy()) ? "on" : "off") + ", ms since last loop: " + deltaTime.toMillis() + ((deltaTime.toMillis() < 10) ? "  " : ""));
+                debugLabel.setText("Fancy graphics: " + ((pixelPainter.isFancy()) ? "on" : "off")
+                        + ", ms since last loop: " + deltaTime.toMillis() + ((deltaTime.toMillis() < 10) ? "  " : ""));
             }
         }
     }

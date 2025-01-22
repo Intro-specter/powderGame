@@ -1,4 +1,5 @@
 package Simulation;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -18,7 +19,7 @@ public class PowderGameBoard {
         this.width = width;
         this.height = height;
         this.board = new ArrayList<Particle>();
-        for (int i = 0; i < width*height; i++) {
+        for (int i = 0; i < width * height; i++) {
             this.board.add(new Empty(this, i));
         }
         this.createBarrier();
@@ -65,11 +66,19 @@ public class PowderGameBoard {
     }
 
     public void wipe() {
-        this.board.replaceAll(element -> (element.equals(Material.BARRIER)) ? element : new Empty(this, element.getIndex())); // clear non-BARRIERs from board
+        this.board.replaceAll(
+                element -> (element.equals(Material.BARRIER)) ? element : new Empty(this, element.getIndex())); // clear
+                                                                                                                // non-BARRIERs
+                                                                                                                // from
+                                                                                                                // board
     }
 
     public void createBarrier() {
-        this.board.replaceAll(element -> (element.equals(Material.BARRIER)) ? new Empty(this, element.getIndex()) : element); // clear BARRIERs from board
+        this.board.replaceAll(
+                element -> (element.equals(Material.BARRIER)) ? new Empty(this, element.getIndex()) : element); // clear
+                                                                                                                // BARRIERs
+                                                                                                                // from
+                                                                                                                // board
         for (int i = 0; i < this.width; i++) { // Floor and ceiling
             this.setCell(new Barrier(this, i));
             this.setCell(new Barrier(this, (this.height - 1) * this.width + i));
@@ -86,15 +95,16 @@ public class PowderGameBoard {
         if (difference > 0) { // if widening the board
             for (int i = 0; i < this.height; i++) {
                 for (int j = 0; j < difference; j++) {
-                    this.board.add(i * this.width + this.width + i * difference + j, new Empty(this, i * this.width + this.width + i * difference + j));
+                    this.board.add(i * this.width + this.width + i * difference + j,
+                            new Empty(this, i * this.width + this.width + i * difference + j));
                 }
-            } 
+            }
         } else if (difference < 0) { // if shrinking the board
             for (int i = 0; i < this.height; i++) {
                 for (int j = 0; j > difference; j--) {
                     this.board.remove(i * this.width + this.width + i * difference + difference);
                 }
-            } 
+            }
         }
         this.assignAllIndices();
     }
@@ -132,7 +142,7 @@ public class PowderGameBoard {
             case U:
                 return -this.width;
             case UR:
-                return -this.width + 1; 
+                return -this.width + 1;
             case L:
                 return -1;
             case R:
@@ -141,7 +151,7 @@ public class PowderGameBoard {
                 return this.width - 1;
             case D:
                 return this.width;
-            case DR: 
+            case DR:
                 return this.width + 1;
             default:
                 return 0;
@@ -188,7 +198,9 @@ public class PowderGameBoard {
         for (int i = (vec[0] > this.placingRadius) ? vec[0] - this.placingRadius : 0; i < xEnd; i++) {
             for (int j = (vec[1] > this.placingRadius) ? vec[1] - this.placingRadius : 0; j < yEnd; j++) {
                 try {
-                    if ((this.getCell(this.vecToIndex(i, j)).equals(Material.EMPTY) || mouseHandler.getChosenMaterial().equals(Material.EMPTY)) && !this.getCell(this.vecToIndex(i, j)).equals(Material.BARRIER)) {
+                    if ((this.getCell(this.vecToIndex(i, j)).equals(Material.EMPTY)
+                            || mouseHandler.getChosenMaterial().equals(Material.EMPTY))
+                            && !this.getCell(this.vecToIndex(i, j)).equals(Material.BARRIER)) {
                         this.setCell(mouseHandler.getChosenMaterial().toParticle(this, this.vecToIndex(i, j)));
                     }
                 } catch (Exception e) {
@@ -226,7 +238,7 @@ public class PowderGameBoard {
                 if (toCheck.getMaterial().isIn(Material.DOWN_DEPTH_RECOLORABLE)) {
                     toCheck.applyOcclusion(cumulative_occlusion);
                 }
-                
+
             }
         }
     }
@@ -236,11 +248,12 @@ public class PowderGameBoard {
         this.update();
     }
 
-    public void stepFancy() { 
+    public void stepFancy() {
         this.stepSim();
         this.downDepthFilter();
     }
-    // downDepthFilter has crazy overhead and doesn't really need calling every tick to look nice, 
+    // downDepthFilter has crazy overhead and doesn't really need calling every tick
+    // to look nice,
     // so we can separate it to be called every few frames.
 
     @Override

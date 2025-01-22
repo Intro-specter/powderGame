@@ -1,4 +1,5 @@
 package GUI;
+
 import java.awt.event.*;
 import java.awt.event.MouseAdapter;
 
@@ -28,7 +29,7 @@ public class MouseHandler extends MouseAdapter {
     public void setMotionListener(MouseMotionAdapter listener) {
         this.motionListener = listener;
     }
-    
+
     public int getX() {
         return x + X_OFFSET;
     }
@@ -58,11 +59,11 @@ public class MouseHandler extends MouseAdapter {
         this.y = e.getY();
         this.active = true;
     }
- 
+
     public void mouseReleased(MouseEvent e) {
         this.active = false;
     }
- 
+
     public void mouseExited(MouseEvent e) {
         this.active = false;
     }

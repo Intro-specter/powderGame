@@ -1,4 +1,5 @@
 package Simulation.Particles;
+
 import java.util.Random;
 
 import Simulation.Direction;
@@ -58,7 +59,9 @@ public class Cloud extends Particle {
             return;
         }
 
-        if (upParticle.getMaterial() == Material.CLOUD && leftParticle.getMaterial() == Material.CLOUD && rightParticle.getMaterial() == Material.CLOUD && downParticle.getMaterial() == Material.CLOUD && rng.nextInt(CONDENSE_CHANCE) == 0) {
+        if (upParticle.getMaterial() == Material.CLOUD && leftParticle.getMaterial() == Material.CLOUD
+                && rightParticle.getMaterial() == Material.CLOUD && downParticle.getMaterial() == Material.CLOUD
+                && rng.nextInt(CONDENSE_CHANCE) == 0) {
             this.board.setCell(new Water(this.board, this.index));
             return;
         }

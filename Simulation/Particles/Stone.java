@@ -1,4 +1,5 @@
 package Simulation.Particles;
+
 import java.util.Random;
 
 import Simulation.Direction;
@@ -40,7 +41,8 @@ public class Stone extends Particle {
     public void update() {
         this.flipActive();
 
-        if (this.board.getNearbyParticle(this.index, Direction.DR).equals(Material.STONE) || this.board.getNearbyParticle(this.index, Direction.L).equals(Material.STONE)) {
+        if (this.board.getNearbyParticle(this.index, Direction.DR).equals(Material.STONE)
+                || this.board.getNearbyParticle(this.index, Direction.L).equals(Material.STONE)) {
             return;
         }
 

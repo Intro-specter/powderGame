@@ -1,4 +1,5 @@
 package Simulation.Particles;
+
 import java.util.Random;
 
 import Simulation.Direction;
@@ -37,7 +38,7 @@ public class Sand extends Particle {
     public void update() {
         this.flipActive();
 
-        Particle downParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D)); 
+        Particle downParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D));
         if (this.canSwap(downParticle.getMaterial())) {
             this.board.swapCells(this.index, downParticle.getIndex());
             return;
@@ -46,7 +47,7 @@ public class Sand extends Particle {
         Particle downLeftParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.DL));
         Particle downRightParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.DR));
         if (this.canSwap(downLeftParticle.getMaterial())) {
-            if (this.canSwap(downRightParticle.getMaterial()) && rng.nextInt(2)==0) {
+            if (this.canSwap(downRightParticle.getMaterial()) && rng.nextInt(2) == 0) {
                 this.board.swapCells(this.index, downRightParticle.getIndex());
                 return;
             }

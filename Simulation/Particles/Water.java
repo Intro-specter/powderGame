@@ -47,7 +47,7 @@ public class Water extends Particle {
     public void update() {
         this.flipActive();
 
-        Particle downParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D)); 
+        Particle downParticle = this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D));
         if (this.canSwap(downParticle.getMaterial())) {
             this.board.swapCells(this.index, downParticle.getIndex());
             return;
@@ -70,14 +70,11 @@ public class Water extends Particle {
             if (rng.nextInt(EVAPORATE_CHANCE) == 0) {
                 this.board.setCell(new Cloud(this.board, this.index));
                 return;
-            } /* else if (rng.nextInt(FREEZE_TO_ICE_CHANCE) == 0) {
-                this.board.setCell(new Ice(this.board, this.index));
-                return;
-            } */
+            }
         }
 
         if (this.canSwap(leftParticle.getMaterial())) {
-            if (this.canSwap(rightParticle.getMaterial()) && rng.nextInt(2)==0) {
+            if (this.canSwap(rightParticle.getMaterial()) && rng.nextInt(2) == 0) {
                 this.board.swapCells(this.index, rightParticle.getIndex());
                 return;
             }

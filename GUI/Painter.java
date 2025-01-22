@@ -1,4 +1,5 @@
 package GUI;
+
 import javax.swing.JPanel;
 
 import Simulation.PowderGameBoard;
@@ -21,23 +22,41 @@ public class Painter extends JPanel {
         this.milliseconds_per_frame = milliseconds_per_frame;
     }
 
-    public boolean isFancy() {return this.fancyGraphics;}
+    public boolean isFancy() {
+        return this.fancyGraphics;
+    }
 
-    public void setFancy(boolean fancy) {this.fancyGraphics = fancy;}
+    public void setFancy(boolean fancy) {
+        this.fancyGraphics = fancy;
+    }
 
-    public void flipFancy() {this.fancyGraphics = !this.fancyGraphics;}
+    public void flipFancy() {
+        this.fancyGraphics = !this.fancyGraphics;
+    }
 
-    public boolean isShowingText() {return this.showingText;}
+    public boolean isShowingText() {
+        return this.showingText;
+    }
 
-    public void setShowingText(boolean showingText) {this.showingText = showingText;}
+    public void setShowingText(boolean showingText) {
+        this.showingText = showingText;
+    }
 
-    public void flipShowingText() {this.showingText = !this.showingText;}
+    public void flipShowingText() {
+        this.showingText = !this.showingText;
+    }
 
-    public boolean isShowingTextBackground() {return this.showingTextBackground;}
+    public boolean isShowingTextBackground() {
+        return this.showingTextBackground;
+    }
 
-    public void setShowingTextBackground(boolean showingTextBackground) {this.showingTextBackground = showingTextBackground;}
+    public void setShowingTextBackground(boolean showingTextBackground) {
+        this.showingTextBackground = showingTextBackground;
+    }
 
-    public void flipShowingTextBackground() {this.showingTextBackground = !this.showingTextBackground;}
+    public void flipShowingTextBackground() {
+        this.showingTextBackground = !this.showingTextBackground;
+    }
 
     public int getMSPerFrame() {
         return this.milliseconds_per_frame;
@@ -74,7 +93,7 @@ public class Painter extends JPanel {
         for (int i = 0; i < this.parentBoard.getHeight(); i++) {
             for (int j = 0; j < this.parentBoard.getWidth(); j++) {
                 g2d.setColor(this.parentBoard.getCell(this.parentBoard.vecToIndex(j, i)).getColor());
-                g2d.fillRect(j*this.scale, i*this.scale, this.scale, this.scale);
+                g2d.fillRect(j * this.scale, i * this.scale, this.scale, this.scale);
             }
         }
     }

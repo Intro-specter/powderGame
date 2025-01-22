@@ -31,15 +31,15 @@ public class Ice extends Particle {
     }
 
     public boolean isEncased() {
-        return this.board.getCell(this.board.applyDirToIndex(this.index, Direction.U)).equals(this) 
-            && this.board.getCell(this.board.applyDirToIndex(this.index, Direction.L)).equals(this) 
-            && this.board.getCell(this.board.applyDirToIndex(this.index, Direction.R)).equals(this) 
-            && this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D)).equals(this);
+        return this.board.getCell(this.board.applyDirToIndex(this.index, Direction.U)).equals(this)
+                && this.board.getCell(this.board.applyDirToIndex(this.index, Direction.L)).equals(this)
+                && this.board.getCell(this.board.applyDirToIndex(this.index, Direction.R)).equals(this)
+                && this.board.getCell(this.board.applyDirToIndex(this.index, Direction.D)).equals(this);
     }
 
     public boolean neighbourInteraction() {
-        Direction[] neighbours = {Direction.U, Direction.L, Direction.R, Direction.D};
-        for (Direction dir : neighbours) {    
+        Direction[] neighbours = { Direction.U, Direction.L, Direction.R, Direction.D };
+        for (Direction dir : neighbours) {
             Particle particle = this.board.getCell(this.board.applyDirToIndex(this.index, dir));
 
             if (particle.getMaterial() == Material.WATER && rng.nextInt(FREEZE_WATER_CHANCE) == 0) {

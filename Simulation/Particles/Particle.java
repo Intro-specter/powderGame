@@ -52,7 +52,8 @@ public class Particle {
     }
 
     protected void stdOcclusion(int totalOcclusionValue, Color start, Color end) {
-        this.color = Particle.shiftColorTowardsTarget(start, end, this.board.getHeight()*this.board.MAX_OCCLUSION, totalOcclusionValue);
+        this.color = Particle.shiftColorTowardsTarget(start, end, this.board.getHeight() * this.board.MAX_OCCLUSION,
+                totalOcclusionValue);
     }
 
     public void applyOcclusion(int totalOcclusionValue) {
@@ -70,16 +71,16 @@ public class Particle {
     }
 
     public static Color addToColor(Color color, int add) {
-        return new Color((color.getRed() > Math.abs(add)) ? (color.getRed() + add) % 256 : color.getRed(), 
-            (color.getGreen() > Math.abs(add)) ? (color.getGreen() + add) % 256 : color.getGreen(), 
-            (color.getBlue() > Math.abs(add)) ? (color.getBlue() + add) % 256 : color.getBlue());
+        return new Color((color.getRed() > Math.abs(add)) ? (color.getRed() + add) % 256 : color.getRed(),
+                (color.getGreen() > Math.abs(add)) ? (color.getGreen() + add) % 256 : color.getGreen(),
+                (color.getBlue() > Math.abs(add)) ? (color.getBlue() + add) % 256 : color.getBlue());
     }
 
     public static Color shiftColorTowardsTarget(Color color, Color targetColor, int max, int progress) {
-        return new Color(color.getRed()+(targetColor.getRed()-color.getRed())*progress/max,
-        color.getGreen()+(targetColor.getGreen()-color.getGreen())*progress/max,
-        color.getBlue()+(targetColor.getBlue()-color.getBlue())*progress/max);
-    } 
+        return new Color(color.getRed() + (targetColor.getRed() - color.getRed()) * progress / max,
+                color.getGreen() + (targetColor.getGreen() - color.getGreen()) * progress / max,
+                color.getBlue() + (targetColor.getBlue() - color.getBlue()) * progress / max);
+    }
 
     public void update() { // we overload this to implement the per tick updates
         return;
