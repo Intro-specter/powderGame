@@ -12,14 +12,14 @@ public class Painter extends JPanel {
     private boolean paused;
     private boolean showingText = false;
     private boolean showingTextBackground = true;
-    private int milliseconds_per_frame;
+    private int millisecondsPerFrame;
     private boolean fancyGraphics = true;
 
-    public Painter(PowderGameBoard inBoard, int scale, boolean paused, int milliseconds_per_frame) {
+    public Painter(PowderGameBoard inBoard, int scale, boolean paused, int millisecondsPerFrame) {
         this.parentBoard = inBoard;
         this.scale = scale;
         this.paused = paused;
-        this.milliseconds_per_frame = milliseconds_per_frame;
+        this.millisecondsPerFrame = millisecondsPerFrame;
     }
 
     public boolean isFancy() {
@@ -59,11 +59,11 @@ public class Painter extends JPanel {
     }
 
     public int getMSPerFrame() {
-        return this.milliseconds_per_frame;
+        return this.millisecondsPerFrame;
     }
 
     public void setMSPerFrame(int mspf) {
-        this.milliseconds_per_frame = mspf;
+        this.millisecondsPerFrame = mspf;
     }
 
     public boolean isPaused() {

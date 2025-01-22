@@ -1,7 +1,4 @@
 package Simulation.Particles;
-/*
- * TODO: Try a temperature variable to influence condensation and freezing
- */
 
 import java.util.Random;
 

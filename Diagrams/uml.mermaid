@@ -9,102 +9,144 @@ classDiagram
     Material : STONE
     Material : ICE
     Material : LAVA
-    Material : Color EMPTY_COLOR
-    Material : Color BARRIER_COLOR
-    Material : Color SAND_COLOR
-    Material : Color WATER_COLOR
-    Material : Color WATER_COLOR_ALT
-    Material : Color CLOUD_COLOR
-    Material : Color CLOUD_COLOR_ALT
-    Material : Color STONE_COLOR
-    Material : Color LAVA_COLOR
-    Material : Color LAVA_COLOR_ALT
-    Material : Color ICE_COLOR
-    Material : String ANSI_RESET
-    Material : String ANSI_BLUE
-    Material : String ANSI_YELLOW
-    Material : +toColor()
-    Material : +getName()
-    Material : +toString()
+    Material : Material[] DOWN_DEPTH_RECOLORABLE$
+    Material : String ANSI_RESET$
+    Material : String ANSI_BLUE$
+    Material : String ANSI_YELLOW$
+    Material : +isIn(Material[] materialArray) boolean
+    Material : +isSimMaterial() boolean
+    Material : +toParticle() Particle
+    Material : +getName() String
+    Material : +toString() String
     
     Material --> Particle
     Particle : #Material material
+    Particle : #PowderGameBoard board
     Particle : #int index
     Particle : #boolean active
-    Particle : +getMaterial()
-    Particle : +getIndex()
+    Particle : #Color color
+    Particle : #int occlusionValue
+    Particle : +getMaterial() Material
+    Particle : +getIndex() int
     Particle : +setIndex(int index)
-    Particle : +isActive()
+    Particle : +isActive() boolean
     Particle : +setActive(boolean active)
     Particle : +flipActive()
-    Particle : +update(PowderGameBoard board)
-    Particle : +hasAttribute(String attributeName)
-    Particle : +equals(Particle other)
-    Particle : +equals(Material other)
-    Particle : +getName()
-    Particle : +toString()
+    Particle : +stdOcclusion(int totalOcclusionValue, Color start, Color end)
+    Particle : +applyOcclusion(int totalOcclusionValue)
+    Particle : +getDepthInDirection(Direction dir) int
+    Particle : +addToColor(Color color, int add)$
+    Particle : +shiftColorTowardsTarget(Color color, Color targetcolor, int max, int progress)$
+    Particle : +update()
+    Particle : +hasAttribute(String attributeName) boolean
+    Particle : +equals(Particle other) boolean
+    Particle : +equals(Material other) boolean
+    Particle : +getColor() Color
+    Particle : +setColor(Color color)
+    Particle : +getName() String
+    Particle : +toString() String
 
     Particle <|-- Empty
+    Empty : -Color STD_EMPTY_COLOR$
 
     Particle <|-- Barrier
+    Barrier : -Color STD_BARRIER_COLOR$
 
     Particle <|-- Sand
-    Sand : -Random rng
-    Sand : +canSwap(Material otherMaterial)
-    Sand : +canCompress(PowderGameBoard board)
-    Sand : +update(PowderGameBoard board)
+    Sand : -Random rng$
+    Sand : -Color STD_SAND_COLOR$
+    Sand : -int WATER_SWAP_CHANCE$
+    Sand : +canSwap(Material otherMaterial) boolean
+    Sand : +applyOcclusion(int totalOcclusionValue)
+    Sand : +update()
 
     Particle <|-- Water
-    Water : -Random rng
-    Water : +canSwap(Material otherMaterial)
-    Water : +update(PowderGameBoard board)
+    Water : -Random rng$
+    Water : -Color STD_WATER_COLOR$
+    Water : -int CLOUD_SWAP_CHANCE$
+    Water : -int SAND_SWAP_CHANCE$
+    Water : -int ICE_SWAP_CHANCE$
+    Water : -int EVAPORATE_CHANCE$
+    Water : -int WHEATHER_STONE_CHANCE$
+    Water : +canSwap(Material otherMaterial) boolean
+    Water : +applyOcclusion(int totalOcclusionValue)
+    Water : +update()
 
     Particle <|-- Cloud
-    Cloud : -Random rng
-    Cloud : +canSwap(Material otherMaterial)
-    Cloud : +update(PowderGameBoard board)
+    Cloud : -Random rng$
+    Cloud : -Color STD_CLOUD_COLOR$
+    Cloud : -Color ALT_CLOUD_COLOR$
+    Cloud : -int CONDENSE_CHANCE$
+    Cloud : +canSwap(Material otherMaterial) boolean
+    Cloud : +applyOcclusion(int totalOcclusionValue)
+    Cloud : +update()
 
     Particle <|-- Stone
-    Stone : -Random rng
-    Stone : +canSwap(Material otherMaterial)
-    Stone : +update(PowderGameBoard board)
+    Stone : -Random rng$
+    Stone : -Color STD_STONE_COLOR$
+    Stone : -int WATER_SWAP_CHANCE$
+    Stone : -int SAND_SWAP_CHANCE$
+    Stone : +canSwap(Material otherMaterial) boolean
+    Stone : +applyOcclusion(int totalOcclusionValue)
+    Stone : +update()
 
     Particle <|-- Ice
-    Ice : -Random rng
-    Ice : +canSwap(Material otherMaterial)
-    Ice : +neighbourInteraction(PowderGameBoard board)
-    Ice : +update(PowderGameBoard board)
+    Ice : -Random rng$
+    Ice : -Color STD_ICE_COLOR$
+    Ice : -FREEZE_WATER_CHANCE$
+    Ice : -MELT_TO_WATER_CHANCE$
+    Ice : +canSwap(Material otherMaterial) boolean
+    Ice : +isEncased() boolean
+    Ice : +neighbourInteraction() boolean
+    Ice : +applyOcclusion(int totalOcclusionValue)
+    Ice : +update()
 
     Particle <|-- Lava
-    Lava : -Random rng
-    Lava : +canSwap(Material otherMaterial)
-    Lava : +neighbourInteraction(PowderGameBoard board)
-    Lava : +update(PowderGameBoard board)
+    Lava : -Random rng$
+    Lava : -Color STD_LAVA_COLOR$
+    Lava : -Color ALT_LAVA_COLOR$
+    Lava : -int STONE_SWAP_CHANCE$
+    Lava : -int FREEZE_TO_STONE_CHANCE$
+    Lava : +canSwap(Material otherMaterial) boolean
+    Lava : +neighbourInteraction() boolean
+    Lava : +applyOcclusion(int totalOcclusionValue)
+    Lava : +update()
 
     Particle --> PowderGameBoard
+    PowderGameBoard : +int MAX_OCCLUSION
     PowderGameBoard : -ArrayList<Particle> board
     PowderGameBoard : -int width
     PowderGameBoard : -int height
-    PowderGameBoard : +getSize()
-    PowderGameBoard : +getWidth()
+    PowderGameBoard : -int placingRadius
+    PowderGameBoard : +getPlacingRadius() int
+    PowderGameBoard : +setPlacingRadius(int radius)
+    PowderGameBoard : +getBoard() ArrayList<Particle>
+    PowderGameBoard : +getSize() int
+    PowderGameBoard : +getWidth() int
     PowderGameBoard : +setWidth(int width)
-    PowderGameBoard : +getHeight()
+    PowderGameBoard : +getHeight() int
     PowderGameBoard : +setHeight(int height)
+    PowderGameBoard : +wipe()
     PowderGameBoard : +createBarrier()
     PowderGameBoard : +changeBoardWidth(int newWidth)
     PowderGameBoard : +changeBoardHeight(int newHeight)
-    PowderGameBoard : +indexToPos(int index)
-    PowderGameBoard : +posToIndex(int x, int y)
-    PowderGameBoard : +applyDirToIndex(int index, Direction dir)
-    PowderGameBoard : +getNearbyParticle(int index, Direction dir)
-    PowderGameBoard : +getCell(int index)
+    PowderGameBoard : +indexToVec(int index) int[]
+    PowderGameBoard : +vecToIndex(int x, int y) int
+    PowderGameBoard : +dirToIndex(Direction dir) int
+    PowderGameBoard : +applyDirToIndex(int index, Direction dir) int
+    PowderGameBoard : +assignAllIndices()
+    PowderGameBoard : +getNearbyParticle(int index, Direction dir) Particle
+    PowderGameBoard : +getCell(int index) Particle
     PowderGameBoard : +setCell(Particle particle)
     PowderGameBoard : +moveCell(int index, Particle particle)
     PowderGameBoard : +swapCells(int firstIndex, int secondIndex)
+    PowderGameBoard : +attemptPlace(int index, MouseHandler mouseHandler)
     PowderGameBoard : +update()
     PowderGameBoard : +readyBoard()
-    PowderGameBoard : +executeTick()
-    PowderGameBoard : +toString()
+    PowderGameBoard : +downDepthFilter()
+    PowderGameBoard : +stepSim()
+    PowderGameBoard : +stepFancy()
+    PowderGameBoard : +toString() String
 
     PowderGameBoard --> PowderTest
     PowderTest : +main(String[] args)
@@ -112,37 +154,61 @@ classDiagram
     PowderGameBoard --> PowderGameWindow
     PowderGameWindow : +main(String[] args)
 
+    PowderGameWindow --> Main
+    Main : +main(String[] args)
+
     WheelListener --> PowderGameWindow
     WheelListener : -int moveDir
-    WheelListener : +getMoveDir()
+    WheelListener : +getMoveDir() int
     WheelListener : +setMoveDir(int inMoveDir)
     WheelListener : +resetMoveDir()
     WheelListener : +mouseWheelMoved(MouseWheelEvent e)
 
     MouseHandler --> PowderGameWindow
+    MouseHandler : -int X_OFFSET
+    MouseHandler : -int Y_OFFSET
     MouseHandler : -int x
     MouseHandler : -int y
     MouseHandler : -boolean active
-    MouseHandler : +getX()
+    MouseHandler : -MouseMotionAdapter motionListener
+    MouseHandler : -Material chosenMaterial
+    MouseHandler : +getChoseMaterial() Material
+    MouseHandler : +setChosenMaterial(Material material)
+    MouseHandler : +getMotionListener() MouseMotionAdapter
+    MouseHandler : +setMotionListener(MouseMotionAdapter motionListener)
+    MouseHandler : +getX() int
     MouseHandler : +setX(int inX)
-    MouseHandler : +getY()
+    MouseHandler : +getY() int
     MouseHandler : +setY(int inY)
     MouseHandler : +setPos(int inX, int inY)
-    MouseHandler : +getState()
-    MouseHandler : +setState(boolean inState)
+    MouseHandler : +isActive() boolean
+    MouseHandler : +setActive(boolean active)
     MouseHandler : +mousePressed(MouseEvent e)
     MouseHandler : +mouseReleased(MouseEvent e)
-    MouseHandler : +mouseEntered(MouseEvent e)
     MouseHandler : +mouseExited(MouseEvent e)
-    MouseHandler : +mouseClicked(MouseEvent e)
 
     Painter --> PowderGameWindow
     Painter : -PowderGameBoard parentBoard
     Painter : -int scale
     Painter : -boolean paused
-    Painter : +isPaused()
+    Painter : -boolean showingText
+    Painter : -boolean showingTextBackground
+    Painter : -int millisecondsPerFrame
+    Painter : -boolean fancyGraphics
+    Painter : +isFancy() boolean
+    Painter : +setFancy(boolean fancy)
+    Painter : +flipFancy()
+    Painter : +isShowingText() boolean
+    Painter : +setShowingText(boolean showingText)
+    Painter : +flipShowingText()
+    Painter : +isShowingTextBackground() boolean
+    Painter : +setShowingTextBackground(boolean showingTextBackground)
+    Painter : +flipShowingTextBackground()
+    Painter : +getMSPerFrame() int
+    Painter : +setMSPerFrame(int mspf)
+    Painter : +isPaused() boolean
     Painter : +setPaused(boolean paused)
     Painter : +flipPaused()
-    Painter : +getScale()
+    Painter : +getScale() int
     Painter : +setScale(int scale)
     Painter : +paintComponents(Graphics g)
