@@ -5,7 +5,7 @@ import Simulation.PowderGameBoard;
 import java.awt.Color;
 
 public class Empty extends Particle {
-    private static final Color STD_EMPTY_COLOR = new Color(75, 75, 75);
+    private static final Color STD_EMPTY_COLOR = new Color(125, 125, 125);
 
     public Empty(PowderGameBoard board, int index) {
         super(board, Material.EMPTY, index);

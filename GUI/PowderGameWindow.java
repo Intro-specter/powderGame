@@ -102,15 +102,21 @@ public class PowderGameWindow {
                 } else if (e.getKeyCode() == KeyEvent.VK_2) {
                     mouseHandler.setChosenMaterial(Material.SAND);
                 } else if (e.getKeyCode() == KeyEvent.VK_3) {
-                    mouseHandler.setChosenMaterial(Material.WATER);
+                    mouseHandler.setChosenMaterial(Material.SEED);
                 } else if (e.getKeyCode() == KeyEvent.VK_4) {
-                    mouseHandler.setChosenMaterial(Material.CLOUD);
+                    mouseHandler.setChosenMaterial(Material.ICE);
                 } else if (e.getKeyCode() == KeyEvent.VK_5) {
                     mouseHandler.setChosenMaterial(Material.STONE);
                 } else if (e.getKeyCode() == KeyEvent.VK_6) {
-                    mouseHandler.setChosenMaterial(Material.ICE);
+                    mouseHandler.setChosenMaterial(Material.WOOD);
                 } else if (e.getKeyCode() == KeyEvent.VK_7) {
+                    mouseHandler.setChosenMaterial(Material.WATER);
+                } else if (e.getKeyCode() == KeyEvent.VK_8) {
                     mouseHandler.setChosenMaterial(Material.LAVA);
+                } else if (e.getKeyCode() == KeyEvent.VK_9) {
+                    mouseHandler.setChosenMaterial(Material.CLOUD);
+                } else if (e.getKeyCode() == KeyEvent.VK_0) {
+                    mouseHandler.setChosenMaterial(Material.FIRE);
                 }
             }
         });

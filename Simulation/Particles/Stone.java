@@ -9,7 +9,7 @@ import java.awt.Color;
 
 public class Stone extends Particle {
     private static Random rng = new Random();
-    private static final Color STD_STONE_COLOR = new Color(150, 125, 125);
+    private static final Color STD_STONE_COLOR = new Color(100, 75, 75);
     private static final int WATER_SWAP_CHANCE = 2;
     private static final int SAND_SWAP_CHANCE = 1000;
 
@@ -27,6 +27,8 @@ public class Stone extends Particle {
                 return true;
             case Material.WATER:
                 return rng.nextInt(WATER_SWAP_CHANCE) == 0;
+            case Material.FIRE:
+                return true;
             case Material.SAND:
                 return rng.nextInt(SAND_SWAP_CHANCE) == 0;
             default:

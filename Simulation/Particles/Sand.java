@@ -19,10 +19,10 @@ public class Sand extends Particle {
     }
 
     public boolean canSwap(Material otherMaterial) {
+        if (otherMaterial.isIn(Material.GASES)) {return true;}
+
         switch (otherMaterial) {
             case Material.EMPTY:
-                return true;
-            case Material.CLOUD:
                 return true;
             case Material.WATER:
                 return rng.nextInt(WATER_SWAP_CHANCE) == 0; // (100/bound)% chance

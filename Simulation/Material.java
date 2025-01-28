@@ -10,9 +10,15 @@ public enum Material {
     CLOUD,
     STONE,
     ICE,
-    LAVA;
+    LAVA,
+    FIRE,
+    SEED,
+    WOOD;
 
-    public static final Material[] DOWN_DEPTH_RECOLORABLE = { SAND, WATER, CLOUD, STONE, ICE, LAVA };
+    public static final Material[] DOWN_DEPTH_RECOLORABLE = { SAND, WATER, CLOUD, STONE, ICE, LAVA, SEED, WOOD };
+    public static final Material[] STRUCTURAL_MATERIALS = { STONE, WOOD };
+    public static final Material[] GASES = { CLOUD, FIRE };
+    public static final Material[] SOIL_MATERIALS = { SAND, STONE };
 
     public boolean isIn(Material[] materialArray) {
         for (Material check : materialArray) {
@@ -45,6 +51,12 @@ public enum Material {
                 return new Ice(board, index);
             case LAVA:
                 return new Lava(board, index);
+            case FIRE:
+                return new Fire(board, index);
+            case SEED:
+                return new Seed(board, index);
+            case WOOD:
+                return new Wood(board, index);
             default:
                 throw new Exception("Unrecognized Particle for Material: " + this.getName());
         }
@@ -68,6 +80,12 @@ public enum Material {
                 return "Ice";
             case LAVA:
                 return "Lava";
+            case FIRE:
+                return "Fire";
+            case SEED:
+                return "Seed";
+            case WOOD:
+                return "Wood";
             default:
                 return this.toString();
         }

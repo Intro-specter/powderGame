@@ -30,6 +30,8 @@ public class Water extends Particle {
                 return rng.nextInt(SAND_SWAP_CHANCE) == 0;
             case Material.CLOUD:
                 return rng.nextInt(CLOUD_SWAP_CHANCE) == 0;
+            case Material.FIRE:
+                return true;
             case Material.ICE:
                 return rng.nextInt(ICE_SWAP_CHANCE) == 0;
             default:

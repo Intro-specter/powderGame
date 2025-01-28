@@ -27,10 +27,13 @@ Tastatur:
 - G: Zusätzliche Grafikprozesse ein-/ausschalten
 - 1: Empty
 - 2: Sand
-- 3: Water
-- 4: Cloud
+- 3: Seed
+- 4: Ice
 - 5: Stone
-- 6: Ice
-- 7: Lava
+- 6: Wood
+- 7: Water
+- 8: Lava 
+- 9: Cloud
+- 0: Fire
 
 Dieses Projekt wurde von @Intro-specter (CB) gebaut.

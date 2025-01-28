@@ -112,6 +112,63 @@ classDiagram
     Lava : +applyOcclusion(int totalOcclusionValue)
     Lava : +update()
 
+    Particle <|-- Seed
+    Seed : -Random rng$
+    Seed : -Color STD_SEED_COLOR$
+    Seed : -WATER_SWAP_CHANCE$
+    Seed : -GROW_CHANCE$
+    Seed : -GENERATE_FIRE_CHANCE$
+    Seed : -CATCH_FIRE_CHANCE$
+    Seed : -BURN_AWAY_CHANCE$
+    Seed : -SPREAD_FIRE_CHANCE$
+    Seed : -burning
+    Seed : +canSwap(Material otherMaterial) boolean
+    Seed : +catchFire()
+    Seed : +burn() boolean
+    Seed : +neighbourInteraction() boolean
+    Seed : +applyOcclusion(int totalOcclusionValue)
+    Seed : +canGrow() boolean
+    Seed : +grow()
+    Seed : +update()
+
+    Particle <|-- Wood
+    Wood : -Random rng$
+    Wood : -Color FIRST_STD_WOOD_COLOR$
+    Wood : -Color SECOND_STD_WOOD_COLOR$
+    Wood : -int BRANCH_POINT_CHANCE$
+    Wood : -int WATER_SWAP_CHANCE$
+    Wood : -int GROW_CHANCE$
+    Wood : -int GROW_SEED_CHANCE$
+    Wood : -int GENERATE_FIRE_CHANCE$
+    Wood : -int CATCH_FIRE_CHANCE$
+    Wood : -int BURN_AWAY_CHANCE$
+    Wood : -int SPREAD_FIRE_CHANCE$
+    Wood : -boolean altcolor
+    Wood : -boolean burning
+    Wood : -boolean branchPoint
+    Wood : +rollGrowChance() boolean
+    Wood : +grow(Direction dir)
+    Wood : +catchFire()
+    Wood : +burn() boolean
+    Wood : +neighbourInteraction() boolean
+    Wood : +canSwap(Material otherMaterial) boolean
+    Wood : +applyOcclusion(int totalOcclusionValue)
+    Wood : +isSupported() boolean
+    Wood : +update()
+
+    Particle <|-- Fire
+    Fire : -Random rng$
+    Fire : -Color STD_FIRE_COLOR$
+    Fire : -Color FIRST_ALT_FIRE_COLOR$
+    Fire : -Color SECOND_ALT_FIRE_COLOR$
+    Fire : -int EVAPORATE_WATER_CHANCE$
+    Fire : -int MELT_ICE_CHANCE$
+    Fire : -int SPUTTER_CHANCE$
+    Fire : +randomizeColor()
+    Fire : +canSwap(Material otherMaterial) boolean
+    Fire : +neighbourInteraction() boolean
+    Fire : +update()
+
     Particle --> PowderGameBoard
     PowderGameBoard : +int MAX_OCCLUSION
     PowderGameBoard : -ArrayList<Particle> board

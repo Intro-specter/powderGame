@@ -6,6 +6,10 @@ stateDiagram-v2
     state sand_melt <<choice>> %% sand to lava
     state ice_melt <<choice>> %% ice to sand
     state lava_freeze <<choice>> %% lava to stone
+    state seed_burn <<choice>>
+    state wood_burn <<choice>>
+    state sprout <<choice>>
+    state fruit <<choice>>
     [*] --> Empty: generate
     [*] --> Barrier: generate
     Sand --> sand_melt
@@ -13,6 +17,8 @@ stateDiagram-v2
     Lava --> ice_melt
     Lava --> sand_melt
     Lava --> lava_freeze
+    Lava --> seed_burn
+    Lava --> wood_burn
     Water --> evaporate
     Water --> weather
     Water --> water_freeze
@@ -20,6 +26,12 @@ stateDiagram-v2
     Cloud --> condense
     Ice --> ice_melt
     Ice --> water_freeze
+    Wood --> wood_burn
+    Wood --> fruit
+    Seed --> seed_burn
+    Seed --> sprout
+    Fire --> seed_burn
+    Fire --> wood_burn
     evaporate --> Cloud: evaporate
     condense --> Water: condense
     weather --> Sand: weather
@@ -27,3 +39,7 @@ stateDiagram-v2
     lava_freeze --> Stone: freeze 
     ice_melt --> Water: melt
     water_freeze --> Ice: freeze
+    seed_burn --> Fire: burn
+    wood_burn --> Fire: burn
+    fruit --> Seed: fruit
+    sprout --> Wood: fruit

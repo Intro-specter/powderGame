@@ -13,6 +13,7 @@ public class Lava extends Particle {
     private static final Color ALT_LAVA_COLOR = new Color(255, 150, 100);
     private static final int STONE_SWAP_CHANCE = 10;
     private static final int FREEZE_TO_STONE_CHANCE = 5;
+    private static final int GENERATE_FIRE_CHANCE = 40;
 
     public Lava(PowderGameBoard board, int index) {
         super(board, Material.LAVA, index);
@@ -21,10 +22,10 @@ public class Lava extends Particle {
     }
 
     public boolean canSwap(Material otherMaterial) {
+        if (otherMaterial.isIn(Material.GASES)) {return true;}
+
         switch (otherMaterial) {
             case Material.EMPTY:
-                return true;
-            case Material.CLOUD:
                 return true;
             case Material.WATER:
                 return true;
@@ -52,6 +53,14 @@ public class Lava extends Particle {
             } else if (particle.getMaterial() == Material.SAND) {
                 this.board.setCell(new Lava(this.board, particle.getIndex()));
                 return true;
+            } else if (particle.getMaterial() == Material.EMPTY && rng.nextInt(GENERATE_FIRE_CHANCE) == 0) {
+                this.board.setCell(new Fire(this.board, particle.getIndex()));
+            } else if (particle.equals(Material.SEED)) {
+                Seed seed = (Seed)particle;
+                seed.burn();
+            } else if (particle.equals(Material.WOOD)) {
+                Wood wood = (Wood)particle;
+                wood.burn();
             }
         }
 
