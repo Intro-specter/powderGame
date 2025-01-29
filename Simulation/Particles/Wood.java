@@ -96,7 +96,9 @@ public class Wood extends Particle {
         for (Direction dir : neighbours) {
             Particle particle = this.board.getCell(this.board.applyDirToIndex(this.index, dir));
 
-            if (particle.equals(Material.SEED)) {
+            if (particle.equals(Material.WATER) || particle.equals(Material.ICE)) {
+                this.burning = false;
+            } else if (particle.equals(Material.SEED)) {
                 Seed seed = (Seed)(particle);
                 seed.catchFire();
                 return true;

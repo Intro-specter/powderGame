@@ -41,10 +41,18 @@ public class Fire extends Particle {
         for (Direction dir : neighbours) {
             Particle particle = this.board.getCell(this.board.applyDirToIndex(this.index, dir));
 
-            if (particle.equals(Material.WATER) && rng.nextInt(EVAPORATE_WATER_CHANCE) == 0) {
-                this.board.setCell(new Cloud(this.board, particle.getIndex()));
-            } else if (particle.equals(Material.ICE) && rng.nextInt(MELT_ICE_CHANCE) == 0) {
-                this.board.setCell(new Water(this.board, particle.getIndex()));
+            if (particle.equals(Material.WATER)) {
+                if (rng.nextInt(EVAPORATE_WATER_CHANCE) == 0) {
+                    this.board.setCell(new Cloud(this.board, particle.getIndex())); 
+                } else if (rng.nextInt(SPUTTER_CHANCE) == 0) {
+                    this.board.setCell(new Empty(this.board, this.index));
+                }
+            } else if (particle.equals(Material.ICE)) {
+                if (rng.nextInt(MELT_ICE_CHANCE) == 0) {
+                    this.board.setCell(new Water(this.board, particle.getIndex()));
+                }else if (rng.nextInt(SPUTTER_CHANCE) == 0) {
+                    this.board.setCell(new Empty(this.board, this.index));
+                }
             } else if (particle.equals(Material.SEED)) {
                 Seed seed = (Seed)(particle);
                 seed.catchFire();
