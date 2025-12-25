@@ -117,6 +117,11 @@ public class PowderGameWindow {
                     mouseHandler.setChosenMaterial(Material.CLOUD);
                 } else if (e.getKeyCode() == KeyEvent.VK_0) {
                     mouseHandler.setChosenMaterial(Material.FIRE);
+                } 
+
+                // 🗿
+                else if (e.getKeyCode() == KeyEvent.VK_PERIOD) {
+                    mouseHandler.setChosenMaterial(Material.GOL_CELL);
                 }
             }
         });

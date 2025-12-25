@@ -13,7 +13,8 @@ public enum Material {
     LAVA,
     FIRE,
     SEED,
-    WOOD;
+    WOOD,
+    GOL_CELL;
 
     public static final Material[] DOWN_DEPTH_RECOLORABLE = { SAND, WATER, CLOUD, STONE, ICE, LAVA, SEED, WOOD };
     public static final Material[] STRUCTURAL_MATERIALS = { STONE, WOOD };
@@ -57,6 +58,8 @@ public enum Material {
                 return new Seed(board, index);
             case WOOD:
                 return new Wood(board, index);
+            case GOL_CELL:
+                return new GolCell(board, index);
             default:
                 throw new Exception("Unrecognized Particle for Material: " + this.getName());
         }
@@ -86,6 +89,8 @@ public enum Material {
                 return "Seed";
             case WOOD:
                 return "Wood";
+            case GOL_CELL:
+                return "Gol Cell";
             default:
                 return this.toString();
         }
